@@ -1,0 +1,14 @@
+package nashtech.rookie.uniform.dtos.response;
+
+import lombok.Builder;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+public class AuthResponse {
+    private String fullName;
+    private String gender;
+    private LocalDateTime birthday;
+}

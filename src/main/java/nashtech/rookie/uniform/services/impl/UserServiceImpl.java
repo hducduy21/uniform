@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.dtos.request.AuthRequest;
 import nashtech.rookie.uniform.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.dtos.response.ApiResponse;
 import nashtech.rookie.uniform.entities.User;
