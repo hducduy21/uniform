@@ -15,20 +15,4 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public ApiResponse<Void> createUser(UserRegisterRequest userRegisterRequest) {
-        // Check if the email, phoneNumber already exists
-
-        User user = UserMapper.INSTANCE.userRegisterRequestToUser(userRegisterRequest);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        userRepository.save(user);
-
-        return ApiResponse.<Void>builder()
-                .message("User created successfully")
-                .success(true)
-                .data(null)
-                .build();
-    }
 }

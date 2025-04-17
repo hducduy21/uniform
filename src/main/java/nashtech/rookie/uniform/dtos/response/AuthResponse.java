@@ -11,4 +11,5 @@ public class AuthResponse {
     private String fullName;
     private String gender;
     private LocalDateTime birthday;
+    private TokenPair tokens;
 }

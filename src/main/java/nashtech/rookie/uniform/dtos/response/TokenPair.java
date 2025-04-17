@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.dtos;
+package nashtech.rookie.uniform.dtos.response;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,9 +1,13 @@
 package nashtech.rookie.uniform.dtos.response;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Data;
+import nashtech.rookie.uniform.entities.enums.EGender;
+import nashtech.rookie.uniform.entities.enums.ERole;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -16,4 +20,12 @@ public class UserGeneralResponse {
     private String phoneNumber;
 
     private String fullName;
+
+    private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    private EGender gender;
+
+    @Enumerated(EnumType.STRING)
+    private ERole role;
 }
