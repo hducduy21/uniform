@@ -1,0 +1,9 @@
+{
+  "databaseChangeLog": [
+    {
+      "include": {
+        "file": "db/changelog/V1_create_table_users.json"
+      }
+    }
+  ]
+}
