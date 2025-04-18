@@ -29,7 +29,7 @@ public class AuthController {
 
     @PostMapping(path = "/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> createUser(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
+    public ApiResponse<Void> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
         return authService.register(userRegisterRequest);
     }
 

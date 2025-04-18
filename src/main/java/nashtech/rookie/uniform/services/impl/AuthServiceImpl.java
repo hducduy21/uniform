@@ -6,6 +6,7 @@ import nashtech.rookie.uniform.dtos.request.AuthRequest;
 import nashtech.rookie.uniform.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.dtos.response.ApiResponse;
 import nashtech.rookie.uniform.entities.User;
+import nashtech.rookie.uniform.exceptions.BadRequestException;
 import nashtech.rookie.uniform.mappers.UserMapper;
 import nashtech.rookie.uniform.repositories.UserRepository;
 import nashtech.rookie.uniform.services.AuthService;
@@ -36,18 +37,18 @@ public class AuthServiceImpl implements AuthService {
     public ApiResponse<Void> register(UserRegisterRequest userRegisterRequest) {
         // Need optimize for check if the email, phoneNumber already exists
         if(userRepository.existsByEmail(userRegisterRequest.getEmail())) {
-            throw new BadCredentialsException("Email already in use");
+            throw new BadRequestException("Email already in use");
         }
 
         if(userRepository.existsByPhoneNumber(userRegisterRequest.getPhoneNumber())) {
-            throw new BadCredentialsException("Phone number already in use");
+            throw new BadRequestException("Phone number already in use");
         }
 
         User user = UserMapper.INSTANCE.userRegisterRequestToUser(userRegisterRequest);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepository.save(user);
-
+        System.out.println(user);
         return ApiResponse.<Void>builder()
                 .message("User created successfully")
                 .success(true)

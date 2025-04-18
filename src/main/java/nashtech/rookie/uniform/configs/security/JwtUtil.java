@@ -6,6 +6,9 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.entities.User;
+import nashtech.rookie.uniform.entities.enums.ErrorCode;
+import nashtech.rookie.uniform.exceptions.BadRequestException;
+import nashtech.rookie.uniform.exceptions.InternalServerErrorException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +33,7 @@ public class JwtUtil {
             jwsObject.sign(new MACSigner(secretKey.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            throw new RuntimeException("Error signing JWT token");
+            throw new InternalServerErrorException(ErrorCode.JWT_GENEREATE_ERROR.getCode());
         }
     }
 
@@ -67,7 +70,7 @@ public class JwtUtil {
             JWSVerifier verifier = new MACVerifier(secretKey.getBytes());
 
             if (!jwsObject.verify(verifier)) {
-                throw new RuntimeException("Token signature invalid");
+                throw new BadRequestException("Your authentication session is invalid. Please log in again to continue!");
             }
 
             Map<String, Object> jsonPayload = jwsObject.getPayload().toJSONObject();
@@ -75,11 +78,11 @@ public class JwtUtil {
 
             Date expiration = claims.getExpirationTime();
             if (expiration != null && expiration.before(new Date())) {
-                throw new RuntimeException("Token expired");
+                throw new BadRequestException("Your session has expired. Please log in again to continue!");
             }
             return claims;
         } catch (Exception e) {
-            throw new RuntimeException("Error extracting JWT claims: " + e.getMessage(), e);
+            throw new InternalServerErrorException(ErrorCode.JWT_EXTRACT_CLAIM.getCode());
         }
     }
 
@@ -88,7 +91,7 @@ public class JwtUtil {
         try{
             return claims.getStringClaim(claimKey);
         } catch (Exception e) {
-            return null;
+            throw new InternalServerErrorException(ErrorCode.JWT_EXTRACT_CLAIM.getCode());
         }
     }
 

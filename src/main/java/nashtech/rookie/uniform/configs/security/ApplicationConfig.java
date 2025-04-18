@@ -1,6 +1,8 @@
 package nashtech.rookie.uniform.configs.security;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.exceptions.ForbiddenException;
+import nashtech.rookie.uniform.exceptions.InternalServerErrorException;
 import nashtech.rookie.uniform.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +23,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return phoneNumber -> userRepository.findByPhoneNumber(phoneNumber).map(CustomUserDetails::new)
-                .orElseThrow(()->new UsernameNotFoundException("User not found!") );
+                .orElseThrow(()->new ForbiddenException("User not found!") );
     }
 
     @Bean
@@ -33,9 +35,12 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-            throws Exception {
-        return config.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+        try{
+            return config.getAuthenticationManager();
+        }catch (Exception e) {
+            throw new InternalServerErrorException();
+        }
     }
 
     @Bean
