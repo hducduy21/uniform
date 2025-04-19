@@ -1,18 +1,20 @@
 package nashtech.rookie.uniform.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import nashtech.rookie.uniform.entities.enums.EGender;
 import nashtech.rookie.uniform.entities.enums.ERole;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "users")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -52,4 +54,29 @@ public class User {
     private Boolean locked = false;
     @Builder.Default
     private Boolean enabled = true;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<WishList> wishlists;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+            ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+            ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        User user = (User) o;
+        return getId() != null && Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy hibernateProxy
+            ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+            : getClass().hashCode();
+    }
 }
