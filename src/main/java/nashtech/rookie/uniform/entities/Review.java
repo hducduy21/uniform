@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Entity(name = "product_rating")
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter

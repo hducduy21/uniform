@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.configs.security;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.exceptions.BadCredentialsException;
 import nashtech.rookie.uniform.exceptions.ForbiddenException;
 import nashtech.rookie.uniform.exceptions.InternalServerErrorException;
 import nashtech.rookie.uniform.repositories.UserRepository;
@@ -23,7 +24,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return phoneNumber -> userRepository.findByPhoneNumber(phoneNumber).map(CustomUserDetails::new)
-                .orElseThrow(()->new ForbiddenException("User not found!") );
+                .orElseThrow(()->new BadCredentialsException("Invalid phone number or password"));
     }
 
     @Bean

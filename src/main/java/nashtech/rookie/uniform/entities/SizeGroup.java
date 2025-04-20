@@ -2,24 +2,24 @@ package nashtech.rookie.uniform.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import nashtech.rookie.uniform.entities.enums.ESizeType;
+
+import java.util.List;
 
 @Entity(name = "sizes")
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter
 @ToString
-public class Size {
+public class SizeGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
-    private String sizeName;
+    private String sizeTitle;
 
-    @Enumerated(EnumType.STRING)
-    private ESizeType sizeType;
+    @ElementCollection
+    private List<String> elements;
 }

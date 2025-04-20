@@ -2,6 +2,7 @@ package nashtech.rookie.uniform.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import nashtech.rookie.uniform.entities.enums.ECategotyStatus;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -9,7 +10,6 @@ import java.util.Set;
 @Entity(name = "categories")
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter
@@ -25,10 +25,11 @@ public class Category {
     private String description;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ECategotyStatus status = ECategotyStatus.UPCOMING;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id", nullable = true)
     private Category parent;
 
     @ManyToMany(mappedBy = "categories")
@@ -37,7 +38,9 @@ public class Category {
     @Column(nullable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+    private String createdBy;
 
     private LocalDateTime updatedAt;
+    private String updatedBy;
 }
 

@@ -4,5 +4,6 @@ public enum ECategotyStatus {
     MAIN,
     ACTIVE,
     INACTIVE,
-    UPCOMING
+    UPCOMING,
+    FOCUS
 }

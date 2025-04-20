@@ -6,7 +6,6 @@ import lombok.*;
 @Entity(name="carts")
 @AllArgsConstructor
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter

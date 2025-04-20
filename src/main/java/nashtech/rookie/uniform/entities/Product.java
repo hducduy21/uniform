@@ -13,7 +13,6 @@ import java.util.UUID;
 @Entity(name = "products")
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter
@@ -28,14 +27,15 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    private String category;
-
     private String material;
 
     private String description;
 
+    private String imageUrl;
+
     @Enumerated(EnumType.STRING)
-    private EProductStatus status;
+    @Builder.Default
+    private EProductStatus status = EProductStatus.UPCOMING;
 
     @Builder.Default
     private float rating = 0;

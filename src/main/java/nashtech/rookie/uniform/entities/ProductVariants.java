@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity(name = "product_attributes")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "size_id", "color_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "size_id", "color"}))
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter
@@ -21,13 +20,11 @@ public class ProductVariants {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "size_id", nullable = false)
-    private Size size;
+    @Column(nullable = false)
+    private String size;
 
-    @ManyToOne
-    @JoinColumn(name = "color_id", nullable = false)
-    private Color color;
+    @Column(nullable = false)
+    private String color;
 
     private String imageUrl;
 

@@ -31,7 +31,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         //get token from header
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || StringUtils.startsWith(authHeader,"Bearer ")) {
+        if (authHeader == null || !StringUtils.startsWith(authHeader,"Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }

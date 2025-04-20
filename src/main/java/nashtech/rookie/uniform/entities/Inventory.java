@@ -6,7 +6,6 @@ import lombok.*;
 @Entity(name = "inventory")
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter

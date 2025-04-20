@@ -6,7 +6,6 @@ import lombok.*;
 @Entity(name = "wishlists")
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter

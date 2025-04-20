@@ -6,7 +6,6 @@ import lombok.*;
 @Entity(name = "product_category")
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter

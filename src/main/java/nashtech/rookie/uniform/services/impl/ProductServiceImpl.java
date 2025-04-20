@@ -1,0 +1,135 @@
+package nashtech.rookie.uniform.services.impl;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.dtos.request.ProductRequest;
+import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
+import nashtech.rookie.uniform.dtos.response.ProductResponse;
+import nashtech.rookie.uniform.entities.Product;
+import nashtech.rookie.uniform.entities.ProductVariants;
+import nashtech.rookie.uniform.entities.SizeGroup;
+import nashtech.rookie.uniform.entities.enums.EProductStatus;
+import nashtech.rookie.uniform.exceptions.BadRequestException;
+import nashtech.rookie.uniform.mappers.ProductMapper;
+import nashtech.rookie.uniform.repositories.ProductRepository;
+import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
+import nashtech.rookie.uniform.repositories.SizeGroupRepository;
+import nashtech.rookie.uniform.services.ProductService;
+import nashtech.rookie.uniform.utils.SecurityUtil;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+@Service
+@RequiredArgsConstructor
+public class ProductServiceImpl implements ProductService {
+    private final ProductRepository productRepository;
+    private final SizeGroupRepository sizeGroupRepository;
+    private final ProductVariantsRepository productVariantsRepository;
+
+    @Override
+    @Transactional
+    public List<ProductGeneralResponse> getProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductMapper.INSTANCE::productToProductGeneralResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<ProductGeneralResponse> getActiveProducts() {
+        return productRepository.findAllByStatus(EProductStatus.ACTIVE)
+                .stream()
+                .map(ProductMapper.INSTANCE::productToProductGeneralResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<ProductGeneralResponse> getActiveProductsByCategoryId(Long categoryId) {
+        return productRepository.findAllByStatusAndCategory(EProductStatus.ACTIVE, categoryId)
+                .stream()
+                .map(ProductMapper.INSTANCE::productToProductGeneralResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse getProductById(UUID productId) {
+        return ProductMapper.INSTANCE.productToProductResponse(getProduct(productId));
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse createProduct(ProductRequest productRequest) {
+        SizeGroup sizeType = getSizes(productRequest.getSizeTypeId());
+
+        Product product = ProductMapper.INSTANCE.productRequestToProduct(productRequest);
+
+        product.setCreatedBy(SecurityUtil.getCurrentUser().getEmail());
+
+        product = saveProduct(product);
+
+        createProductVariants(product, productRequest.getHexColors(), sizeType.getElements());
+
+        return ProductMapper.INSTANCE.productToProductResponse(product);
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse updateProduct(UUID productId, ProductRequest productRequest) {
+        Product product = getProduct(productId);
+
+        ProductMapper.INSTANCE.updateProductFromRequest(product, productRequest);
+
+        product.setUpdatedAt(LocalDateTime.now());
+        product.setLastUpdatedBy(SecurityUtil.getCurrentUser().getEmail());
+
+        saveProduct(product);
+
+        return ProductMapper.INSTANCE.productToProductResponse(product);
+    }
+
+    @Override
+    @Transactional
+    public void deleteProduct(UUID productId) {
+        Product product = getProduct(productId);
+        product.setStatus(EProductStatus.DELETED);
+        product.setUpdatedAt(LocalDateTime.now());
+        product.setLastUpdatedBy(SecurityUtil.getCurrentUser().getEmail());
+
+        saveProduct(product);
+    }
+
+    private Product getProduct(UUID productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new BadRequestException("Product not found"));
+    }
+
+    private Product saveProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    private SizeGroup getSizes(Integer sizeTypeId) {
+        return sizeGroupRepository.findById(sizeTypeId)
+                .orElseThrow(() -> new BadRequestException("Size not found"));
+    }
+
+    private void createProductVariants(Product product, Collection<String> hexCodes, Collection<String> sizes) {
+        List<ProductVariants> productVariantsList = new ArrayList<>();
+        for (String size : sizes) {
+            for (String color : hexCodes) {
+                ProductVariants productVariants = ProductVariants.builder()
+                        .color(color)
+                        .size(size)
+                        .product(product)
+                        .build();
+                productVariantsList.add(productVariants);
+            }
+        }
+
+        productVariantsRepository.saveAll(productVariantsList);
+    }
+}
