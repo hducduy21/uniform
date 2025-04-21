@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.SizeRequest;
 import nashtech.rookie.uniform.dtos.response.ApiResponse;
@@ -31,13 +32,13 @@ public class SizeGroupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<SizeResponse> createSizeGroup(@RequestBody SizeRequest sizeResponse) {
+    public ApiResponse<SizeResponse> createSizeGroup(@RequestBody @Valid SizeRequest sizeResponse) {
         return ResponseUtil.successResponse(sizeGroupService.createSize(sizeResponse));
     }
 
     @PutMapping("/{sizeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<SizeResponse> updateSizeGroup(@PathVariable Integer sizeId, @RequestBody SizeRequest sizeResponse) {
+    public ApiResponse<SizeResponse> updateSizeGroup(@PathVariable Integer sizeId, @RequestBody @Valid SizeRequest sizeResponse) {
         return ResponseUtil.successResponse(sizeGroupService.updateSize(sizeId, sizeResponse));
     }
 }

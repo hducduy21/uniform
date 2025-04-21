@@ -20,7 +20,8 @@ public class Cart {
 
     @ManyToOne
     @JoinColumn(name = "product_variants_id", nullable = false)
-    private ProductVariants product;
+    private ProductVariants productVariants;
 
-    private Integer quantity;
+    @Builder.Default
+    private Integer quantity = 1;
 }

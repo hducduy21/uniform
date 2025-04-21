@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.CategoryRequest;
 import nashtech.rookie.uniform.dtos.response.ApiResponse;
@@ -34,13 +35,13 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest) {
+    public ApiResponse<CategoryResponse> createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
         return ResponseUtil.successResponse(categoryService.createCategory(categoryRequest));
     }
 
     @PutMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<CategoryDetailResponse> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequest categoryRequest) {
+    public ApiResponse<CategoryDetailResponse> updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CategoryRequest categoryRequest) {
         return ResponseUtil.successResponse(categoryService.updateCategory(categoryId, categoryRequest));
     }
 

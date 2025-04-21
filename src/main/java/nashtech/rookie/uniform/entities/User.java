@@ -57,6 +57,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<WishList> wishlists;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Cart> carts;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

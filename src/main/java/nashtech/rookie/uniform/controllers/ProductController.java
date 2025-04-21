@@ -1,8 +1,11 @@
 package nashtech.rookie.uniform.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.ProductRequest;
-import nashtech.rookie.uniform.dtos.response.*;
+import nashtech.rookie.uniform.dtos.response.ApiResponse;
+import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
+import nashtech.rookie.uniform.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.services.ProductService;
 import nashtech.rookie.uniform.utils.ResponseUtil;
 import org.springframework.http.HttpStatus;
@@ -31,13 +34,13 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+    public ApiResponse<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
         return ResponseUtil.successResponse(productService.createProduct(productRequest));
     }
 
     @PutMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<ProductResponse> updateProduct(@PathVariable UUID productId, @RequestBody ProductRequest productRequest) {
+    public ApiResponse<ProductResponse> updateProduct(@PathVariable UUID productId, @RequestBody @Valid ProductRequest productRequest) {
         return ResponseUtil.successResponse(productService.updateProduct(productId, productRequest));
     }
 

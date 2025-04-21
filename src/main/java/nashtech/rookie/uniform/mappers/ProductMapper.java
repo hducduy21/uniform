@@ -8,7 +8,7 @@ import nashtech.rookie.uniform.entities.Product;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
