@@ -3,7 +3,7 @@ package nashtech.rookie.uniform.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "product_attributes")
+@Entity(name = "product_variants")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "size_id", "color"}))
 @RequiredArgsConstructor
 @AllArgsConstructor

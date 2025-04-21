@@ -4,14 +4,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.UUID;
 
-@Data
 @Builder
-public class SizeRequest {
+@Data
+public class WishListRequest {
     @NotNull
-    private String name;
-
-    @NotNull
-    private Set<String> elements;
+    private UUID productId;
 }

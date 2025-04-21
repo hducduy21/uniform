@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = ProductMapper.INSTANCE.productRequestToProduct(productRequest);
 
-        product.setCreatedBy(SecurityUtil.getCurrentUser().getEmail());
+        product.setCreatedBy(SecurityUtil.getCurrentUserEmail());
 
         product = saveProduct(product);
 
@@ -85,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
         ProductMapper.INSTANCE.updateProductFromRequest(product, productRequest);
 
         product.setUpdatedAt(LocalDateTime.now());
-        product.setLastUpdatedBy(SecurityUtil.getCurrentUser().getEmail());
+        product.setLastUpdatedBy(SecurityUtil.getCurrentUserEmail());
 
         saveProduct(product);
 
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = getProduct(productId);
         product.setStatus(EProductStatus.DELETED);
         product.setUpdatedAt(LocalDateTime.now());
-        product.setLastUpdatedBy(SecurityUtil.getCurrentUser().getEmail());
+        product.setLastUpdatedBy(SecurityUtil.getCurrentUserEmail());
 
         saveProduct(product);
     }

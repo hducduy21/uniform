@@ -5,9 +5,7 @@ import nashtech.rookie.uniform.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
 import nashtech.rookie.uniform.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.entities.Product;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -20,5 +18,7 @@ public interface ProductMapper {
     ProductGeneralResponse productToProductGeneralResponse(Product product);
     ProductDetailsResponse productToProductDetailsResponse(Product product);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
     void updateProductFromRequest(@MappingTarget Product product, ProductRequest productRequest);
 }

@@ -5,9 +5,7 @@ import nashtech.rookie.uniform.dtos.response.CategoryDetailResponse;
 import nashtech.rookie.uniform.dtos.response.CategoryGeneralResponse;
 import nashtech.rookie.uniform.dtos.response.CategoryResponse;
 import nashtech.rookie.uniform.entities.Category;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -20,6 +18,7 @@ public interface CategoryMapper {
     CategoryGeneralResponse categoryToCategoryGeneralResponse(Category category);
     CategoryDetailResponse categoryToCategoryDetailResponse(Category category);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "parent", ignore = true)
     void updateCategoryFromRequest(@MappingTarget Category category, CategoryRequest categoryRequest);

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +38,10 @@ public class CustomUserDetails implements UserDetails
 
     public String getEmail() {
         return user.getEmail();
+    }
+
+    public UUID getId() {
+        return user.getId();
     }
 
     public String getPhoneNumber() {

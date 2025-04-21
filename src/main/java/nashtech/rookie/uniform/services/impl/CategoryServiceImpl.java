@@ -43,10 +43,8 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         Category category = CategoryMapper.INSTANCE.categoryRequestToCategory(categoryRequest);
-
         category.setParent(parent);
-        category.setCreatedBy(SecurityUtil.getCurrentUser().getEmail());
-        System.out.println(category.getName());
+        category.setCreatedBy(SecurityUtil.getCurrentUserEmail());
 
         category = saveCategory(category);
 
@@ -58,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = getCategory(id);
         CategoryMapper.INSTANCE.updateCategoryFromRequest(category, categoryRequest);
 
-        category.setUpdatedBy(SecurityUtil.getCurrentUser().getEmail());
+        category.setUpdatedBy(SecurityUtil.getCurrentUserEmail());
         category.setUpdatedAt(LocalDateTime.now());
 
         saveCategory(category);
@@ -69,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void updateCategoryStatus(Long id, ECategotyStatus status) {
         Category category = getCategory(id);
         category.setStatus(status);
-        category.setUpdatedBy(SecurityUtil.getCurrentUser().getEmail());
+        category.setUpdatedBy(SecurityUtil.getCurrentUserEmail());
         category.setUpdatedAt(LocalDateTime.now());
 
         saveCategory(category);
