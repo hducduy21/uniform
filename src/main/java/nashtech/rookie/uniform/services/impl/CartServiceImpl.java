@@ -24,6 +24,7 @@ import java.util.UUID;
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final ProductVariantsRepository productVariantsRepository;
+    private final CartMapper cartMapper;
 
     @Transactional
     @Override
@@ -74,7 +75,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public Collection<CartResponse> getAllCarts() {
-        return cartRepository.findByUserId(getCurrentUserId()).stream().map(CartMapper.INSTANCE::cartToCartResponse).toList();
+        return cartRepository.findByUserId(getCurrentUserId()).stream().map(cartMapper::cartToCartResponse).toList();
     }
 
     private void saveCart(Cart cart) {

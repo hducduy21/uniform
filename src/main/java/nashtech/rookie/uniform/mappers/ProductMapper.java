@@ -6,12 +6,9 @@ import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
 import nashtech.rookie.uniform.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.entities.Product;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
-
     Product productRequestToProduct(ProductRequest productRequest);
     ProductRequest productToProductRequest(Product product);
     ProductResponse productToProductResponse(Product product);

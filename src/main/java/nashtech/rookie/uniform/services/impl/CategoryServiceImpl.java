@@ -21,18 +21,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public List<CategoryGeneralResponse> getAllCategories() {
         return categoryRepository.findAll()
                 .stream()
-                .map(CategoryMapper.INSTANCE::categoryToCategoryGeneralResponse)
+                .map(categoryMapper::categoryToCategoryGeneralResponse)
                 .toList();
     }
 
     @Override
     public CategoryResponse getCategoryById(Long id) {
-        return CategoryMapper.INSTANCE.categoryToCategoryResponse(getCategory(id));
+        return categoryMapper.categoryToCategoryResponse(getCategory(id));
     }
 
     @Override
@@ -42,25 +43,25 @@ public class CategoryServiceImpl implements CategoryService {
             parent = getCategory(categoryRequest.getParent());
         }
 
-        Category category = CategoryMapper.INSTANCE.categoryRequestToCategory(categoryRequest);
+        Category category = categoryMapper.categoryRequestToCategory(categoryRequest);
         category.setParent(parent);
         category.setCreatedBy(SecurityUtil.getCurrentUserEmail());
 
         category = saveCategory(category);
 
-        return CategoryMapper.INSTANCE.categoryToCategoryResponse(category);
+        return categoryMapper.categoryToCategoryResponse(category);
     }
 
     @Override
     public CategoryDetailResponse updateCategory(Long id, CategoryRequest categoryRequest) {
         Category category = getCategory(id);
-        CategoryMapper.INSTANCE.updateCategoryFromRequest(category, categoryRequest);
+        categoryMapper.updateCategoryFromRequest(category, categoryRequest);
 
         category.setUpdatedBy(SecurityUtil.getCurrentUserEmail());
         category.setUpdatedAt(LocalDateTime.now());
 
         saveCategory(category);
-        return CategoryMapper.INSTANCE.categoryToCategoryDetailResponse(category);
+        return categoryMapper.categoryToCategoryDetailResponse(category);
     }
 
     @Override

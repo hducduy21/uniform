@@ -4,12 +4,9 @@ import nashtech.rookie.uniform.dtos.request.SizeRequest;
 import nashtech.rookie.uniform.dtos.response.SizeResponse;
 import nashtech.rookie.uniform.entities.SizeGroup;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SizeMapper {
-    SizeMapper INSTANCE = Mappers.getMapper(SizeMapper.class);
-
     @Mapping(target = "sizeTitle", source = "name")
     @Mapping(target = "elements", source = "elements")
     SizeGroup sizeRequestToSize(SizeRequest sizeRequest);

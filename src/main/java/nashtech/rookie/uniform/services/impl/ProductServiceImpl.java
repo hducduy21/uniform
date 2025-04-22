@@ -19,7 +19,10 @@ import nashtech.rookie.uniform.utils.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,13 +30,14 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final SizeGroupRepository sizeGroupRepository;
     private final ProductVariantsRepository productVariantsRepository;
+    private final ProductMapper productMapper;
 
     @Override
     @Transactional
     public List<ProductGeneralResponse> getProducts() {
         return productRepository.findAll()
                 .stream()
-                .map(ProductMapper.INSTANCE::productToProductGeneralResponse)
+                .map(productMapper::productToProductGeneralResponse)
                 .toList();
     }
 
@@ -42,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductGeneralResponse> getActiveProducts() {
         return productRepository.findAllByStatus(EProductStatus.ACTIVE)
                 .stream()
-                .map(ProductMapper.INSTANCE::productToProductGeneralResponse)
+                .map(productMapper::productToProductGeneralResponse)
                 .toList();
     }
 
@@ -51,14 +55,14 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductGeneralResponse> getActiveProductsByCategoryId(Long categoryId) {
         return productRepository.findAllByStatusAndCategory(EProductStatus.ACTIVE, categoryId)
                 .stream()
-                .map(ProductMapper.INSTANCE::productToProductGeneralResponse)
+                .map(productMapper::productToProductGeneralResponse)
                 .toList();
     }
 
     @Override
     @Transactional
     public ProductResponse getProductById(UUID productId) {
-        return ProductMapper.INSTANCE.productToProductResponse(getProduct(productId));
+        return productMapper.productToProductResponse(getProduct(productId));
     }
 
     @Override
@@ -66,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse createProduct(ProductRequest productRequest) {
         SizeGroup sizeType = getSizes(productRequest.getSizeTypeId());
 
-        Product product = ProductMapper.INSTANCE.productRequestToProduct(productRequest);
+        Product product = productMapper.productRequestToProduct(productRequest);
 
         product.setCreatedBy(SecurityUtil.getCurrentUserEmail());
 
@@ -74,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 
         createProductVariants(product, productRequest.getHexColors(), sizeType.getElements());
 
-        return ProductMapper.INSTANCE.productToProductResponse(product);
+        return productMapper.productToProductResponse(product);
     }
 
     @Override
@@ -82,14 +86,14 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse updateProduct(UUID productId, ProductRequest productRequest) {
         Product product = getProduct(productId);
 
-        ProductMapper.INSTANCE.updateProductFromRequest(product, productRequest);
+        productMapper.updateProductFromRequest(product, productRequest);
 
         product.setUpdatedAt(LocalDateTime.now());
         product.setLastUpdatedBy(SecurityUtil.getCurrentUserEmail());
 
         saveProduct(product);
 
-        return ProductMapper.INSTANCE.productToProductResponse(product);
+        return productMapper.productToProductResponse(product);
     }
 
     @Override

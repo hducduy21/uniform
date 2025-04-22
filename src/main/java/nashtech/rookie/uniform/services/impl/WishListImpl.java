@@ -24,6 +24,7 @@ import java.util.UUID;
 public class WishListImpl implements WishListService {
     private final ProductRepository productRepository;
     private final WishListRepository wishListRepository;
+    private final ProductMapper productMapper;
 
     @Transactional
     @Override
@@ -59,7 +60,7 @@ public class WishListImpl implements WishListService {
 
         List<ProductGeneralResponse> productGeneralResponses = wishLists.stream()
                 .map(WishList::getProduct)
-                .map(ProductMapper.INSTANCE::productToProductGeneralResponse).toList();
+                .map(productMapper::productToProductGeneralResponse).toList();
 
         return WishListResponse.builder().products(productGeneralResponses).build();
     }

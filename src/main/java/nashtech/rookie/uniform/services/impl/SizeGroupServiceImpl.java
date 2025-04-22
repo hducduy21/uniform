@@ -16,32 +16,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SizeGroupServiceImpl implements SizeGroupService {
     private final SizeGroupRepository sizeGroupRepository;
+    private final SizeMapper sizeMapper;
+
     @Override
     public List<SizeResponse> getAllSizes() {
         return sizeGroupRepository.findAll()
                 .stream()
-                .map(SizeMapper.INSTANCE::sizeToSizeResponse)
+                .map(sizeMapper::sizeToSizeResponse)
                 .toList();
     }
 
     @Override
     public SizeResponse getSizeById(Integer id) {
-        return SizeMapper.INSTANCE.sizeToSizeResponse(findSizes(id));
+        return sizeMapper.sizeToSizeResponse(findSizes(id));
     }
 
     @Override
     public SizeResponse createSize(SizeRequest sizeRequest) {
-        SizeGroup size = SizeMapper.INSTANCE.sizeRequestToSize(sizeRequest);
+        SizeGroup size = sizeMapper.sizeRequestToSize(sizeRequest);
         size = saveSize(size);
-        return SizeMapper.INSTANCE.sizeToSizeResponse(size);
+        return sizeMapper.sizeToSizeResponse(size);
     }
 
     @Override
     public SizeResponse updateSize(Integer id, SizeRequest sizeRequest) {
         SizeGroup size = findSizes(id);
-        SizeMapper.INSTANCE.updateSizeFromRequest(size, sizeRequest);
+        sizeMapper.updateSizeFromRequest(size, sizeRequest);
         saveSize(size);
-        return SizeMapper.INSTANCE.sizeToSizeResponse(size);
+        return sizeMapper.sizeToSizeResponse(size);
     }
 
     private SizeGroup findSizes(Integer id) {
