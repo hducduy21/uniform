@@ -21,7 +21,4 @@ public class Inventory {
 
     @Column(nullable = false)
     private Integer quantityInStock;
-
-    @Column(nullable = false)
-    private Double costPrice;
 }
