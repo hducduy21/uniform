@@ -8,7 +8,9 @@ import nashtech.rookie.uniform.exceptions.ResourceNotFoundException;
 import nashtech.rookie.uniform.mappers.SizeMapper;
 import nashtech.rookie.uniform.repositories.SizeGroupRepository;
 import nashtech.rookie.uniform.services.SizeGroupService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class SizeGroupServiceImpl implements SizeGroupService {
     private final SizeGroupRepository sizeGroupRepository;
     private final SizeMapper sizeMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public List<SizeResponse> getAllSizes() {
         return sizeGroupRepository.findAll()
@@ -26,11 +29,14 @@ public class SizeGroupServiceImpl implements SizeGroupService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public SizeResponse getSizeById(Integer id) {
         return sizeMapper.sizeToSizeResponse(findSizes(id));
     }
 
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public SizeResponse createSize(SizeRequest sizeRequest) {
         SizeGroup size = sizeMapper.sizeRequestToSize(sizeRequest);
@@ -38,6 +44,8 @@ public class SizeGroupServiceImpl implements SizeGroupService {
         return sizeMapper.sizeToSizeResponse(size);
     }
 
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public SizeResponse updateSize(Integer id, SizeRequest sizeRequest) {
         SizeGroup size = findSizes(id);

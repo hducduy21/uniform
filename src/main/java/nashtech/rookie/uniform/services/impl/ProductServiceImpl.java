@@ -1,6 +1,5 @@
 package nashtech.rookie.uniform.services.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.ProductRequest;
 import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
@@ -16,7 +15,9 @@ import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
 import nashtech.rookie.uniform.repositories.SizeGroupRepository;
 import nashtech.rookie.uniform.services.ProductService;
 import nashtech.rookie.uniform.utils.SecurityUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,8 +33,9 @@ public class ProductServiceImpl implements ProductService {
     private final ProductVariantsRepository productVariantsRepository;
     private final ProductMapper productMapper;
 
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    @Transactional
     public List<ProductGeneralResponse> getProducts() {
         return productRepository.findAll()
                 .stream()
@@ -41,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @Transactional
     public List<ProductGeneralResponse> getActiveProducts() {
         return productRepository.findAllByStatus(EProductStatus.ACTIVE)
                 .stream()
@@ -50,8 +52,8 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @Transactional
     public List<ProductGeneralResponse> getActiveProductsByCategoryId(Long categoryId) {
         return productRepository.findAllByStatusAndCategory(EProductStatus.ACTIVE, categoryId)
                 .stream()
@@ -59,14 +61,15 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @Transactional
     public ProductResponse getProductById(UUID productId) {
         return productMapper.productToProductResponse(getProduct(productId));
     }
 
-    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
+    @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
         SizeGroup sizeType = getSizes(productRequest.getSizeTypeId());
 
@@ -81,8 +84,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productToProductResponse(product);
     }
 
-    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
+    @Override
     public ProductResponse updateProduct(UUID productId, ProductRequest productRequest) {
         Product product = getProduct(productId);
 
@@ -96,8 +100,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productToProductResponse(product);
     }
 
-    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
+    @Override
     public void deleteProduct(UUID productId) {
         Product product = getProduct(productId);
         product.setStatus(EProductStatus.DELETED);

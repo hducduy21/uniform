@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.configs.filters.AuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -16,11 +17,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
+
+    private static final String[] PERMIT_ONLY_GET_ENDPOINTS = {"/api/categories/**", "/api/products/**", "/api/size/**" };
+    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/**" };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,7 +32,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,PERMIT_ONLY_GET_ENDPOINTS).permitAll()
+                        .requestMatchers(PERMIT_ALL_ENDPOINTS).permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

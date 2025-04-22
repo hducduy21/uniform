@@ -1,6 +1,5 @@
 package nashtech.rookie.uniform.services.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.CartRequest;
 import nashtech.rookie.uniform.dtos.response.CartResponse;
@@ -16,6 +15,7 @@ import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
 import nashtech.rookie.uniform.services.CartService;
 import nashtech.rookie.uniform.utils.SecurityUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.UUID;

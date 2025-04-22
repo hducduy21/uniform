@@ -1,6 +1,5 @@
 package nashtech.rookie.uniform.services.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.WishListRequest;
 import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
@@ -16,6 +15,7 @@ import nashtech.rookie.uniform.repositories.WishListRepository;
 import nashtech.rookie.uniform.services.WishListService;
 import nashtech.rookie.uniform.utils.SecurityUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +52,7 @@ public class WishListImpl implements WishListService {
         wishListRepository.delete(wishList);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public WishListResponse getWishList() {
         User user = getCurrentUser();

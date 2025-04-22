@@ -42,7 +42,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private ERole role = ERole.User;
+    private ERole role = ERole.USER;
 
     @Column(nullable = false, updatable = false)
     @Builder.Default

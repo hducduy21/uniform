@@ -1,18 +1,19 @@
 package nashtech.rookie.uniform.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.configs.security.CustomUserDetails;
 import nashtech.rookie.uniform.configs.security.JwtUtil;
 import nashtech.rookie.uniform.dtos.request.AuthRequest;
 import nashtech.rookie.uniform.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.dtos.response.TokenPair;
 import nashtech.rookie.uniform.entities.User;
-import nashtech.rookie.uniform.exceptions.BadCredentialsException;
 import nashtech.rookie.uniform.exceptions.BadRequestException;
 import nashtech.rookie.uniform.mappers.UserMapper;
 import nashtech.rookie.uniform.repositories.UserRepository;
 import nashtech.rookie.uniform.services.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +27,11 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     public TokenPair authenticate(AuthRequest authRequest){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getPhoneNumber(), authRequest.getPassword()));
-        User user = userRepository.findByPhoneNumber(authRequest.getPhoneNumber()).orElseThrow(
-                () -> new BadCredentialsException("Invalid phone number or password")
-        );
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getPhoneNumber(), authRequest.getPassword()));
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
 
         return TokenPair.builder()
-                .accessToken(jwtUtil.generateToken(user))
+                .accessToken(jwtUtil.generateToken(userDetails.getUser()))
                 .refreshToken(jwtUtil.generateToken())
                 .build();
     }

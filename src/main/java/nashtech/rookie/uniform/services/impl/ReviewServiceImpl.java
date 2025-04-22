@@ -11,6 +11,7 @@ import nashtech.rookie.uniform.repositories.ReviewRepository;
 import nashtech.rookie.uniform.services.ReviewService;
 import nashtech.rookie.uniform.utils.SecurityUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
 
+    @Transactional
     @Override
     public void productReview(ReviewRequest reviewRequest) {
         Product product = findProduct(reviewRequest.getProductId());

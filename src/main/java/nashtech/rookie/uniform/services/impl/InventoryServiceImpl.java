@@ -11,7 +11,9 @@ import nashtech.rookie.uniform.mappers.InventoryMapper;
 import nashtech.rookie.uniform.repositories.InventoryRepository;
 import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
 import nashtech.rookie.uniform.services.InventoryService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class InventoryServiceImpl implements InventoryService {
     private final ProductVariantsRepository productVariantsRepository;
     private final InventoryMapper inventoryMapper;
 
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse createInventory(InventoryRequest inventoryRequest) {
         ProductVariants productVariants = findProductVariantsById(inventoryRequest.getProductVariants());
@@ -32,6 +36,8 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
 
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse updateInventory(Long id, InventoryUpdationRequest inventoryUpdationRequest) {
         Inventory inventory = findInventoryById(id);
@@ -41,6 +47,8 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
 
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public List<InventoryResponse> getAllInventories() {
         List<Inventory> inventories = inventoryRepository.findAll();
@@ -49,6 +57,8 @@ public class InventoryServiceImpl implements InventoryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse getInventoryById(Long id) {
         Inventory inventory = findInventoryById(id);
