@@ -9,7 +9,7 @@ import nashtech.rookie.uniform.entities.Product;
 import nashtech.rookie.uniform.entities.ProductVariants;
 import nashtech.rookie.uniform.entities.SizeGroup;
 import nashtech.rookie.uniform.entities.enums.EProductStatus;
-import nashtech.rookie.uniform.exceptions.BadRequestException;
+import nashtech.rookie.uniform.exceptions.ResourceNotFoundException;
 import nashtech.rookie.uniform.mappers.ProductMapper;
 import nashtech.rookie.uniform.repositories.ProductRepository;
 import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
@@ -109,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
 
     private Product getProduct(UUID productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new BadRequestException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     private Product saveProduct(Product product) {
@@ -118,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
 
     private SizeGroup getSizes(Integer sizeTypeId) {
         return sizeGroupRepository.findById(sizeTypeId)
-                .orElseThrow(() -> new BadRequestException("Size not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Size not found"));
     }
 
     private void createProductVariants(Product product, Collection<String> hexCodes, Collection<String> sizes) {
@@ -129,6 +129,7 @@ public class ProductServiceImpl implements ProductService {
                         .color(color)
                         .size(size)
                         .product(product)
+                        .costPrice(product.getPrice())
                         .build();
                 productVariantsList.add(productVariants);
             }

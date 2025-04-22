@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.SizeRequest;
 import nashtech.rookie.uniform.dtos.response.SizeResponse;
 import nashtech.rookie.uniform.entities.SizeGroup;
-import nashtech.rookie.uniform.exceptions.BadRequestException;
+import nashtech.rookie.uniform.exceptions.ResourceNotFoundException;
 import nashtech.rookie.uniform.mappers.SizeMapper;
 import nashtech.rookie.uniform.repositories.SizeGroupRepository;
 import nashtech.rookie.uniform.services.SizeGroupService;
@@ -48,7 +48,7 @@ public class SizeGroupServiceImpl implements SizeGroupService {
 
     private SizeGroup findSizes(Integer id) {
         return sizeGroupRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Size not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Size not found"));
     }
 
     private SizeGroup saveSize(SizeGroup size) {

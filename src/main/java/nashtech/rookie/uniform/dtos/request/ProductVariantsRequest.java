@@ -2,6 +2,7 @@ package nashtech.rookie.uniform.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,5 +26,9 @@ public class ProductVariantsRequest {
         @NotBlank
         @HexCode
         private String hexCode;
+        
+        @PositiveOrZero
+        @NotNull
+        private Double costPrice;
     }
 }

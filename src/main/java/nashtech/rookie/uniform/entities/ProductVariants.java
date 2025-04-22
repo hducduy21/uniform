@@ -30,4 +30,7 @@ public class ProductVariants {
 
     @Builder.Default
     private boolean enabled = true;
+
+    @Column(nullable = false)
+    private Double costPrice;
 }

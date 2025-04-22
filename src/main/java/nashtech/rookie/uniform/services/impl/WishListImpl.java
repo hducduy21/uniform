@@ -9,6 +9,7 @@ import nashtech.rookie.uniform.entities.Product;
 import nashtech.rookie.uniform.entities.User;
 import nashtech.rookie.uniform.entities.WishList;
 import nashtech.rookie.uniform.exceptions.BadRequestException;
+import nashtech.rookie.uniform.exceptions.ResourceNotFoundException;
 import nashtech.rookie.uniform.mappers.ProductMapper;
 import nashtech.rookie.uniform.repositories.ProductRepository;
 import nashtech.rookie.uniform.repositories.WishListRepository;
@@ -46,7 +47,7 @@ public class WishListImpl implements WishListService {
         User user = getCurrentUser();
         Product product = getProductById(productId);
 
-        WishList wishList = wishListRepository.findByUserAndProduct(user, product).orElseThrow(() -> new BadRequestException("Product not found in wish list"));
+        WishList wishList = wishListRepository.findByUserAndProduct(user, product).orElseThrow(() -> new ResourceNotFoundException("Product not found in wish list"));
 
         wishListRepository.delete(wishList);
     }
@@ -74,6 +75,6 @@ public class WishListImpl implements WishListService {
     }
 
     private Product getProductById(UUID productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new BadRequestException("Product not found"));
+        return productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 }

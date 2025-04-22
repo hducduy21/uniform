@@ -12,4 +12,5 @@ public class ProductVariantsResponse {
     private SizeGroup sizeGroup;
     private String color;
     private String imageUrl;
+    private Double costPrice;
 }

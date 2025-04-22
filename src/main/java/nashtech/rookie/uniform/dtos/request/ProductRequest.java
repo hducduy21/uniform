@@ -2,6 +2,7 @@ package nashtech.rookie.uniform.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,9 @@ public class ProductRequest {
     private String material;
     private String description;
     private EProductStatus status;
+
+    @PositiveOrZero
+    private Double price;
 
     @NotNull
     private Integer sizeTypeId;

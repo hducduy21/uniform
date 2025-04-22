@@ -33,6 +33,9 @@ public class Product {
 
     private String imageUrl;
 
+    @Column(nullable = false)
+    private Double price;
+
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private EProductStatus status = EProductStatus.UPCOMING;

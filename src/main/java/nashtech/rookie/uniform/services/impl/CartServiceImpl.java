@@ -9,6 +9,7 @@ import nashtech.rookie.uniform.entities.ProductVariants;
 import nashtech.rookie.uniform.entities.User;
 import nashtech.rookie.uniform.exceptions.BadRequestException;
 import nashtech.rookie.uniform.exceptions.ForbiddenException;
+import nashtech.rookie.uniform.exceptions.ResourceNotFoundException;
 import nashtech.rookie.uniform.mappers.CartMapper;
 import nashtech.rookie.uniform.repositories.CartRepository;
 import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
@@ -91,16 +92,16 @@ public class CartServiceImpl implements CartService {
     }
 
     private ProductVariants getProductVariantsById(Long productVariantsId) {
-        return productVariantsRepository.findById(productVariantsId).orElseThrow(() -> new BadRequestException("Product not found"));
+        return productVariantsRepository.findById(productVariantsId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     private Cart findCart(Long cartId) {
         return cartRepository.findById(cartId)
-                .orElseThrow(() -> new BadRequestException("Cart not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
     }
 
     private Cart findCart(UUID userId, Long productVariantsId) {
         return cartRepository.findByUserIdAndProductVariantsId(userId, productVariantsId)
-                .orElseThrow(() -> new BadRequestException("Product not found in cart"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found in cart"));
     }
 }

@@ -7,7 +7,7 @@ import nashtech.rookie.uniform.dtos.response.CategoryGeneralResponse;
 import nashtech.rookie.uniform.dtos.response.CategoryResponse;
 import nashtech.rookie.uniform.entities.Category;
 import nashtech.rookie.uniform.entities.enums.ECategotyStatus;
-import nashtech.rookie.uniform.exceptions.BadRequestException;
+import nashtech.rookie.uniform.exceptions.ResourceNotFoundException;
 import nashtech.rookie.uniform.mappers.CategoryMapper;
 import nashtech.rookie.uniform.repositories.CategoryRepository;
 import nashtech.rookie.uniform.services.CategoryService;
@@ -76,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private Category getCategory(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     private Category saveCategory(Category category) {
