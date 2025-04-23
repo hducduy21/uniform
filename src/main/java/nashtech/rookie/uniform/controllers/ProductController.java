@@ -2,6 +2,7 @@ package nashtech.rookie.uniform.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.dtos.request.ListVariantsImageUploadationRequest;
 import nashtech.rookie.uniform.dtos.request.ProductRequest;
 import nashtech.rookie.uniform.dtos.response.ApiResponse;
 import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
@@ -9,7 +10,9 @@ import nashtech.rookie.uniform.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.services.ProductService;
 import nashtech.rookie.uniform.utils.ResponseUtil;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -32,10 +35,30 @@ public class ProductController {
         return ResponseUtil.successResponse(productService.getProductById(productId));
     }
 
+    @GetMapping(value = "/{productId}/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public byte[] getProductImageById(@PathVariable UUID productId) {
+        return productService.getProductImageById(productId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
         return ResponseUtil.successResponse(productService.createProduct(productRequest));
+    }
+
+    @PatchMapping("/{productId}/image")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<Void> uploadProductImage(@PathVariable UUID productId, @RequestPart MultipartFile file) {
+        productService.uploadProductImage(productId, file);
+        return ResponseUtil.successResponse("Image uploaded successfully");
+    }
+
+    @PatchMapping("/{productId}/variants/image")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<Void> uploadProductVariantsImage(@PathVariable UUID productId, @ModelAttribute ListVariantsImageUploadationRequest files) {
+        productService.uploadProductVariantsImage(productId, files);
+        return ResponseUtil.successResponse("Images uploaded successfully");
     }
 
     @PutMapping("/{productId}")

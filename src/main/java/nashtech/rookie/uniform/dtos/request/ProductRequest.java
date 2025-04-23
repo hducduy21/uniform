@@ -25,6 +25,7 @@ public class ProductRequest {
     private String description;
     private EProductStatus status;
 
+    @NotNull
     @PositiveOrZero
     private Double price;
 

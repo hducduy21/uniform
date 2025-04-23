@@ -33,8 +33,13 @@ public class LoggingAspect {
 
     @AfterReturning(pointcut = "controllersMethods()", returning = "result")
     public void logAfter(JoinPoint joinPoint, Object result) {
-        String message = ((ApiResponse) result).getMessage();
-        logMethodReturn("CONTROLLER", joinPoint, message);
+        if(result instanceof ApiResponse) {
+            String message = ((ApiResponse) result).getMessage();
+            logMethodReturn("CONTROLLER", joinPoint, message);
+        }
+        else {
+            logMethodReturn("CONTROLLER", joinPoint, "Controller is returning");
+        }
     }
 
     @AfterThrowing(pointcut = "controllersMethods()", throwing = "error")
