@@ -2,8 +2,8 @@ package nashtech.rookie.uniform.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.ListVariantsImageUploadationRequest;
+import nashtech.rookie.uniform.dtos.request.ProductFilter;
 import nashtech.rookie.uniform.dtos.request.ProductRequest;
-import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
 import nashtech.rookie.uniform.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.entities.Product;
 import nashtech.rookie.uniform.entities.ProductVariants;
@@ -17,10 +17,15 @@ import nashtech.rookie.uniform.mappers.ProductVariantsMapper;
 import nashtech.rookie.uniform.repositories.ProductRepository;
 import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
 import nashtech.rookie.uniform.repositories.SizeGroupRepository;
+import nashtech.rookie.uniform.repositories.specs.AdminProductSpecificationBuilder;
+import nashtech.rookie.uniform.repositories.specs.UserProductSpecificationBuilder;
 import nashtech.rookie.uniform.services.ProductService;
 import nashtech.rookie.uniform.services.StorageService;
 import nashtech.rookie.uniform.utils.FileUtil;
 import nashtech.rookie.uniform.utils.SecurityUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,33 +43,24 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final StorageService awsS3Service;
     private final ProductVariantsMapper productVariantsMapper;
+    private final AdminProductSpecificationBuilder adminProductSpecificationBuilder;
+    private final UserProductSpecificationBuilder userProductSpecificationBuilder;
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public List<ProductGeneralResponse> getProducts() {
-        return productRepository.findAll()
-                .stream()
-                .map(productMapper::productToProductGeneralResponse)
-                .toList();
+    public Page<ProductResponse> getProductsByAdmin(Pageable pageable, ProductFilter productFilter) {
+        Specification<Product> spec = adminProductSpecificationBuilder.build(productFilter);
+        Page<Product> products = productRepository.findAll(spec, pageable);
+        return products.map(productMapper::productToProductResponse);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductGeneralResponse> getActiveProducts() {
-        return productRepository.findAllByStatus(EProductStatus.ACTIVE)
-                .stream()
-                .map(productMapper::productToProductGeneralResponse)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<ProductGeneralResponse> getActiveProductsByCategoryId(Long categoryId) {
-        return productRepository.findAllByStatusAndCategory(EProductStatus.ACTIVE, categoryId)
-                .stream()
-                .map(productMapper::productToProductGeneralResponse)
-                .toList();
+    public Page<ProductResponse> getProducts(Pageable pageable, ProductFilter productFilter) {
+        Specification<Product> spec = userProductSpecificationBuilder.build(productFilter);
+        Page<Product> products = productRepository.findAll(spec, pageable);
+        return products.map(productMapper::productToProductResponse);
     }
 
     @Transactional(readOnly = true)

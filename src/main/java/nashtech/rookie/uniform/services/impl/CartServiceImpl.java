@@ -14,10 +14,11 @@ import nashtech.rookie.uniform.repositories.CartRepository;
 import nashtech.rookie.uniform.repositories.ProductVariantsRepository;
 import nashtech.rookie.uniform.services.CartService;
 import nashtech.rookie.uniform.utils.SecurityUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -75,8 +76,8 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public Collection<CartResponse> getAllCarts() {
-        return cartRepository.findByUserId(getCurrentUserId()).stream().map(cartMapper::cartToCartResponse).toList();
+    public Page<CartResponse> getAllCarts(Pageable pageable) {
+        return cartRepository.findByUserId(getCurrentUserId(), pageable).map(cartMapper::cartToCartResponse);
     }
 
     private void saveCart(Cart cart) {

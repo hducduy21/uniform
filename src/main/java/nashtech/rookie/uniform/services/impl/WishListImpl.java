@@ -2,22 +2,22 @@ package nashtech.rookie.uniform.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.WishListRequest;
-import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
 import nashtech.rookie.uniform.dtos.response.WishListResponse;
 import nashtech.rookie.uniform.entities.Product;
 import nashtech.rookie.uniform.entities.User;
 import nashtech.rookie.uniform.entities.WishList;
 import nashtech.rookie.uniform.exceptions.BadRequestException;
 import nashtech.rookie.uniform.exceptions.ResourceNotFoundException;
-import nashtech.rookie.uniform.mappers.ProductMapper;
+import nashtech.rookie.uniform.mappers.WishListMapper;
 import nashtech.rookie.uniform.repositories.ProductRepository;
 import nashtech.rookie.uniform.repositories.WishListRepository;
 import nashtech.rookie.uniform.services.WishListService;
 import nashtech.rookie.uniform.utils.SecurityUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class WishListImpl implements WishListService {
     private final ProductRepository productRepository;
     private final WishListRepository wishListRepository;
-    private final ProductMapper productMapper;
+    private final WishListMapper wishListMapper;
 
     @Transactional
     @Override
@@ -54,16 +54,12 @@ public class WishListImpl implements WishListService {
 
     @Transactional(readOnly = true)
     @Override
-    public WishListResponse getWishList() {
+    public Page<WishListResponse> getAllWishList(Pageable pageable) {
         User user = getCurrentUser();
 
-        List<WishList> wishLists = wishListRepository.findAllByUser(user);
+        Page<WishList> wishLists = wishListRepository.findAllByUser(user,pageable);
 
-        List<ProductGeneralResponse> productGeneralResponses = wishLists.stream()
-                .map(WishList::getProduct)
-                .map(productMapper::productToProductGeneralResponse).toList();
-
-        return WishListResponse.builder().products(productGeneralResponses).build();
+        return wishLists.map(wishListMapper::wishListToWishListResponse);
     }
 
     private void saveWishList(WishList wishList) {

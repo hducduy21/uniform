@@ -1,6 +1,8 @@
 package nashtech.rookie.uniform.repositories;
 
 import nashtech.rookie.uniform.entities.Cart;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,5 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     boolean existsByUserIdAndProductVariantsId(UUID userId, Long productVariantsId);
     Optional<Cart> findByUserIdAndProductVariantsId(UUID userId, Long productVariantsId);
     Optional<Cart> findByUserId(UUID userId);
+    Page<Cart> findByUserId(UUID userId, Pageable pageable);
 }

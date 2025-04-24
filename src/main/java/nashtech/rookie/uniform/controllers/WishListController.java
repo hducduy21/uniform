@@ -7,6 +7,10 @@ import nashtech.rookie.uniform.dtos.response.ApiResponse;
 import nashtech.rookie.uniform.dtos.response.WishListResponse;
 import nashtech.rookie.uniform.services.WishListService;
 import nashtech.rookie.uniform.utils.ResponseUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +38,7 @@ public class WishListController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<WishListResponse> getWishList() {
-        return ResponseUtil.successResponse(wishListService.getWishList());
+    public ApiResponse<Page<WishListResponse>> getAllWishList(@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseUtil.successResponse(wishListService.getAllWishList(pageable));
     }
 }

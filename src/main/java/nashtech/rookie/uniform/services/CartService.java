@@ -2,8 +2,8 @@ package nashtech.rookie.uniform.services;
 
 import nashtech.rookie.uniform.dtos.request.CartRequest;
 import nashtech.rookie.uniform.dtos.response.CartResponse;
-
-import java.util.Collection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface CartService {
@@ -13,5 +13,5 @@ public interface CartService {
 
     void updateCart(Long productVariantsId, Integer quantity);
 
-    Collection<CartResponse> getAllCarts();
+    Page<CartResponse> getAllCarts(Pageable pageable);
 }

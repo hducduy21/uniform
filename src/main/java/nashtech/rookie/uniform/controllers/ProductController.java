@@ -3,18 +3,21 @@ package nashtech.rookie.uniform.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.dtos.request.ListVariantsImageUploadationRequest;
+import nashtech.rookie.uniform.dtos.request.ProductFilter;
 import nashtech.rookie.uniform.dtos.request.ProductRequest;
 import nashtech.rookie.uniform.dtos.response.ApiResponse;
-import nashtech.rookie.uniform.dtos.response.ProductGeneralResponse;
 import nashtech.rookie.uniform.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.services.ProductService;
 import nashtech.rookie.uniform.utils.ResponseUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collection;
 import java.util.UUID;
 
 @RestController
@@ -25,8 +28,11 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<Collection<ProductGeneralResponse>> getAllProducts() {
-        return ResponseUtil.successResponse(productService.getActiveProducts());
+    public ApiResponse<Page<ProductResponse>> getAllProducts(
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable,
+            @ModelAttribute ProductFilter productFilter
+            ) {
+        return ResponseUtil.successResponse(productService.getProducts(pageable, productFilter));
     }
 
     @GetMapping("/{productId}")

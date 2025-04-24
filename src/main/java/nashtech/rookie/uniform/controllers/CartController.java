@@ -7,10 +7,12 @@ import nashtech.rookie.uniform.dtos.response.ApiResponse;
 import nashtech.rookie.uniform.dtos.response.CartResponse;
 import nashtech.rookie.uniform.services.CartService;
 import nashtech.rookie.uniform.utils.ResponseUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/carts")
@@ -20,8 +22,8 @@ public class CartController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<Collection<CartResponse>> getAllCarts() {
-        return ResponseUtil.successResponse(cartService.getAllCarts());
+    public ApiResponse<Page<CartResponse>> getAllCarts(@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseUtil.successResponse(cartService.getAllCarts(pageable));
     }
 
     @PostMapping
