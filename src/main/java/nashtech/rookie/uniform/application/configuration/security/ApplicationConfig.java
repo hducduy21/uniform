@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.configurations.security;
+package nashtech.rookie.uniform.application.configuration.security;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
@@ -20,7 +20,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return phoneNumber -> new CustomUserDetails(phoneNumber, userInfoProvider);
+        return phoneNumber -> new CustomUserDetails(userInfoProvider.getUserInfo(phoneNumber));
     }
 
     @Bean

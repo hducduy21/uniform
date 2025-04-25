@@ -4,7 +4,10 @@
  *
  * @author Hoang Duc Duy
  */
-@ApplicationModule(displayName = "Wishlish")
+@ApplicationModule(
+        displayName = "Wishlish",
+        allowedDependencies = {"product::*", "user::*", "shared::*"}
+)
 package nashtech.rookie.uniform.wishlist;
 
 import org.springframework.modulith.ApplicationModule;

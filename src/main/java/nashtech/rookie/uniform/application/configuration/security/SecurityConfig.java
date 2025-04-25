@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.configurations.security;
+package nashtech.rookie.uniform.application.configuration.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

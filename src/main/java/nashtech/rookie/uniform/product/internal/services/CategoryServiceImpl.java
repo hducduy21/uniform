@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.product.internal.services;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.product.internal.dtos.request.CategoryRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryDetailResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryGeneralResponse;
@@ -10,7 +11,6 @@ import nashtech.rookie.uniform.product.internal.entities.enums.ECategotyStatus;
 import nashtech.rookie.uniform.product.internal.mappers.CategoryMapper;
 import nashtech.rookie.uniform.product.internal.repositories.CategoryRepository;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
-import nashtech.rookie.uniform.shared.utils.SecurityUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

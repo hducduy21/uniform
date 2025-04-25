@@ -6,7 +6,7 @@
  */
 @ApplicationModule(
         displayName = "Inventory",
-        allowedDependencies = {"product"}
+        allowedDependencies = {"product::*", "user::*", "shared::*"}
 )
 package nashtech.rookie.uniform.inventory;
 

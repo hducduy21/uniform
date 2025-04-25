@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.cart.internal.services;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.cart.internal.dtos.CartRequest;
 import nashtech.rookie.uniform.cart.internal.dtos.CartResponse;
 import nashtech.rookie.uniform.cart.internal.entities.Cart;
@@ -9,7 +10,6 @@ import nashtech.rookie.uniform.cart.internal.repositories.CartRepository;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.ForbiddenException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
-import nashtech.rookie.uniform.shared.utils.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

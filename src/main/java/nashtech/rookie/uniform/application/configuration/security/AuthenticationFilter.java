@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.configurations.security;
+package nashtech.rookie.uniform.application.configuration.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

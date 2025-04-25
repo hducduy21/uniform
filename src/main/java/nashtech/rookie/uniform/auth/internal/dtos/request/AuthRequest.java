@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nashtech.rookie.uniform.shared.validations.RequirePhoneNumberOrEmail;
+import nashtech.rookie.uniform.user.internal.validations.RequirePhoneNumberOrEmail;
 
 @AllArgsConstructor
 @NoArgsConstructor

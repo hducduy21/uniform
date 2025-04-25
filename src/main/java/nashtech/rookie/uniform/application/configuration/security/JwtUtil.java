@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.configurations.security;
+package nashtech.rookie.uniform.application.configuration.security;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -9,6 +9,7 @@ import nashtech.rookie.uniform.shared.enums.ErrorCode;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
 import nashtech.rookie.uniform.user.api.UserInfoProvider;
+import nashtech.rookie.uniform.user.dto.UserInfoDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +40,7 @@ public class JwtUtil {
         }
     }
 
-    public String generateToken(UserInfoProvider user) {
+    public String generateToken(UserInfoDto user) {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())

@@ -1,9 +1,9 @@
 package nashtech.rookie.uniform.wishlist.internal.services;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
-import nashtech.rookie.uniform.shared.utils.SecurityUtil;
 import nashtech.rookie.uniform.wishlist.internal.dtos.WishListRequest;
 import nashtech.rookie.uniform.wishlist.internal.dtos.WishListResponse;
 import nashtech.rookie.uniform.wishlist.internal.entities.WishList;

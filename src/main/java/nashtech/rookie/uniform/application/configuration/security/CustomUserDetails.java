@@ -1,9 +1,9 @@
-package nashtech.rookie.uniform.shared.configurations.security;
+package nashtech.rookie.uniform.application.configuration.security;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import nashtech.rookie.uniform.user.api.UserInfoProvider;
+import nashtech.rookie.uniform.user.dto.UserInfoDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,35 +17,32 @@ import java.util.UUID;
 @Setter
 public class CustomUserDetails implements UserDetails
 {
-    private final String phoneNumber;
-    private final UserInfoProvider userInfoProvider;
+    private final UserInfoDto user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(userInfoProvider.getRole(phoneNumber)));
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override
     public String getPassword() {
-        return userInfoProvider.getPassword(phoneNumber);
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return getValidPhoneNumber();
+        return user.getPhoneNumber();
     }
 
     public String getEmail() {
-        return userInfoProvider.getEmail(phoneNumber);
+        return user.getEmail();
     }
 
     public UUID getId() {
-        return userInfoProvider.getId(phoneNumber);
+        return user.getId();
     }
 
-    public String getPhoneNumber() {
-        return getValidPhoneNumber();
-    }
+    public String getPhoneNumber() {return user.getPhoneNumber();}
 
     @Override
     public boolean isAccountNonExpired() {
@@ -54,7 +51,7 @@ public class CustomUserDetails implements UserDetails
 
     @Override
     public boolean isAccountNonLocked() {
-        return userInfoProvider.isAccountNonLocked(phoneNumber);
+        return !user.isLocked();
     }
 
     @Override
@@ -64,10 +61,7 @@ public class CustomUserDetails implements UserDetails
 
     @Override
     public boolean isEnabled() {
-        return userInfoProvider.isAccountEnabled(phoneNumber);
+        return user.isEnabled();
     }
 
-    private String getValidPhoneNumber() {
-        return userInfoProvider.isPhoneNumberExists(phoneNumber) ? phoneNumber : null;
-    }
 }

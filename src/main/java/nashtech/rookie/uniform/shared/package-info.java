@@ -1,11 +1,9 @@
-/**
- * Application module containing common configurations and utilities.
- *
- * @author Hoang Duc Duy
- */
 @ApplicationModule(
-        displayName = "shared"
+        displayName = "shared",
+        type = ApplicationModule.Type.OPEN
 )
+@NamedInterface("api")
 package nashtech.rookie.uniform.shared;
 
 import org.springframework.modulith.ApplicationModule;
+import org.springframework.modulith.NamedInterface;

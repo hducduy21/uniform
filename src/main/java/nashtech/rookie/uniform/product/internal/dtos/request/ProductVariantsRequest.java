@@ -6,7 +6,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nashtech.rookie.uniform.shared.validations.HexCode;
+import nashtech.rookie.uniform.product.internal.validations.HexCode;
 
 import java.util.List;
 

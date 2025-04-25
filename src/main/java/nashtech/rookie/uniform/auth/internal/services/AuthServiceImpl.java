@@ -1,10 +1,10 @@
 package nashtech.rookie.uniform.auth.internal.services;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.application.configuration.security.CustomUserDetails;
+import nashtech.rookie.uniform.application.configuration.security.JwtUtil;
 import nashtech.rookie.uniform.auth.internal.dtos.request.AuthRequest;
 import nashtech.rookie.uniform.auth.internal.dtos.response.TokenPair;
-import nashtech.rookie.uniform.shared.configurations.security.CustomUserDetails;
-import nashtech.rookie.uniform.shared.configurations.security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

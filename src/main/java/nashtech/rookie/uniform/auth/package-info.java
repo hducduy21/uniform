@@ -4,7 +4,10 @@
  *
  * @author Hoang Duc Duy
  */
-@ApplicationModule(displayName = "Authentication")
+@ApplicationModule(
+        displayName = "Authentication",
+        allowedDependencies = {"shared::*"}
+)
 package nashtech.rookie.uniform.auth;
 
 import org.springframework.modulith.ApplicationModule;

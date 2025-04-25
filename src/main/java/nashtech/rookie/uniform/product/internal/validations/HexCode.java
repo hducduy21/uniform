@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.validations;
+package nashtech.rookie.uniform.product.internal.validations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;

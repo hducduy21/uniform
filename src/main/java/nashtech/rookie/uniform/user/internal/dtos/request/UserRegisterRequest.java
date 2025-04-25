@@ -6,8 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nashtech.rookie.uniform.shared.validations.Gender;
-import nashtech.rookie.uniform.shared.validations.PasswordMatches;
+import nashtech.rookie.uniform.user.internal.validations.Gender;
+import nashtech.rookie.uniform.user.internal.validations.PasswordMatches;
 
 import java.time.LocalDateTime;
 

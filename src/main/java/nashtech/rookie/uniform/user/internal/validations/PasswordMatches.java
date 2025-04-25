@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.validations;
+package nashtech.rookie.uniform.user.internal.validations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -14,28 +14,30 @@ import java.lang.reflect.Field;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = RequirePhoneNumberOrEmailValidator.class)
-public @interface RequirePhoneNumberOrEmail {
+@Constraint(validatedBy = PasswordMatchesValidator.class)
+public @interface PasswordMatches{
     String message() default "Passwords do not match";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+
+//    java.lang.annotation.ElementType[] value() default {java.lang.annotation.ElementType.TYPE};
 }
 
-class RequirePhoneNumberOrEmailValidator implements ConstraintValidator<RequirePhoneNumberOrEmail, Object> {
+class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
         try{
-            Field emailField = obj.getClass().getDeclaredField("email");
-            Field phoneNumberField = obj.getClass().getDeclaredField("phoneNumber");
+            Field passwordField = obj.getClass().getDeclaredField("password");
+            Field confirmPasswordField = obj.getClass().getDeclaredField("confirmPassword");
 
-            emailField.setAccessible(true);
-            phoneNumberField.setAccessible(true);
+            passwordField.setAccessible(true);
+            confirmPasswordField.setAccessible(true);
 
-            String email = (String) emailField.get(obj);
-            String phoneNumber = (String) phoneNumberField.get(obj);
+            String password = (String) passwordField.get(obj);
+            String confirmPassword = (String) confirmPasswordField.get(obj);
 
-            if(StringUtils.isNotBlank(email) || StringUtils.isNotBlank(phoneNumber)){
+            if(StringUtils.isNotBlank(password) && StringUtils.equals(password, confirmPassword)){
                 return true;
             }
         }catch (Exception e){
@@ -44,4 +46,3 @@ class RequirePhoneNumberOrEmailValidator implements ConstraintValidator<RequireP
         return false;
     }
 }
-

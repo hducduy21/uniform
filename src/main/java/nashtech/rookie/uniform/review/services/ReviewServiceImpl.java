@@ -1,10 +1,10 @@
 package nashtech.rookie.uniform.review.services;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.review.dtos.ReviewRequest;
 import nashtech.rookie.uniform.review.entities.Review;
 import nashtech.rookie.uniform.review.repositories.ReviewRepository;
-import nashtech.rookie.uniform.shared.utils.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

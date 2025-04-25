@@ -6,7 +6,7 @@
  */
 @ApplicationModule(
         displayName = "Review",
-        allowedDependencies = {"product", "user"}
+        allowedDependencies = {"product::*", "user::*", "shared::*"}
 )
 package nashtech.rookie.uniform.review;
 

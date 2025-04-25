@@ -3,10 +3,9 @@
  *
  * @author Hoang Duc Duy
  */
-
 @ApplicationModule(
-        displayName = "Cart",
-        allowedDependencies = {"product", "user"}
+        displayName = "cart",
+        allowedDependencies = {"product::*", "user::*", "shared::*"}
 )
 package nashtech.rookie.uniform.cart;
 
