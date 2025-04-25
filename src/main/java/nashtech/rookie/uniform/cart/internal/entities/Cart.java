@@ -2,10 +2,11 @@ package nashtech.rookie.uniform.cart.internal.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import nashtech.rookie.uniform.product.entities.ProductVariants;
-import nashtech.rookie.uniform.user.internal.entities.User;
+
+import java.util.UUID;
 
 @Entity(name="carts")
+@Table(name = "carts", schema = "cart")
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
@@ -16,13 +17,11 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private UUID userId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_variants_id", nullable = false)
-    private ProductVariants productVariants;
+    @Column(nullable = false)
+    private Long productVariantsId;
 
     @Builder.Default
     private Integer quantity = 1;

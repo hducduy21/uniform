@@ -7,8 +7,6 @@ import nashtech.rookie.uniform.inventory.internal.dtos.InventoryUpdationRequest;
 import nashtech.rookie.uniform.inventory.internal.entities.Inventory;
 import nashtech.rookie.uniform.inventory.internal.mappers.InventoryMapper;
 import nashtech.rookie.uniform.inventory.internal.repositories.InventoryRepository;
-import nashtech.rookie.uniform.product.entities.ProductVariants;
-import nashtech.rookie.uniform.product.repositories.ProductVariantsRepository;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -20,16 +18,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
-    private final ProductVariantsRepository productVariantsRepository;
     private final InventoryMapper inventoryMapper;
 
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse createInventory(InventoryRequest inventoryRequest) {
-        ProductVariants productVariants = findProductVariantsById(inventoryRequest.getProductVariants());
+
+        // client: get variants if the product variant exists
+
         Inventory inventory = inventoryMapper.inventoryRequestToInventory(inventoryRequest);
-        inventory.setProductVariants(productVariants);
+        inventory.setProductVariantsId(inventoryRequest.getProductVariantsId());
         inventory = saveInventory(inventory);
 
         return inventoryMapper.inventoryToInventoryResponse(inventory);
@@ -66,11 +65,6 @@ public class InventoryServiceImpl implements InventoryService {
 
     private Inventory saveInventory(Inventory inventory) {
         return inventoryRepository.save(inventory);
-    }
-
-    private ProductVariants findProductVariantsById(Long id) {
-        return productVariantsRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product variant not found"));
     }
 
     private Inventory findInventoryById(Long id) {

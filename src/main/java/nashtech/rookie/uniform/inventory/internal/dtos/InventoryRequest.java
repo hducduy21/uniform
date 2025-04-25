@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InventoryRequest {
     @NotNull
-    private Long productVariants;
+    private Long productVariantsId;
 
     @PositiveOrZero
     @NotNull

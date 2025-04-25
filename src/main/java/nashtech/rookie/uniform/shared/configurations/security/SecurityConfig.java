@@ -1,7 +1,6 @@
 package nashtech.rookie.uniform.shared.configurations.security;
 
 import lombok.RequiredArgsConstructor;
-import nashtech.rookie.uniform.shared.configurations.filters.AuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -4,8 +4,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Data;
-import nashtech.rookie.uniform.shared.enums.EGender;
-import nashtech.rookie.uniform.shared.enums.ERole;
+import nashtech.rookie.uniform.user.internal.entities.enums.EGender;
+import nashtech.rookie.uniform.user.internal.entities.enums.ERole;
 
 import java.time.LocalDate;
 import java.util.UUID;

@@ -2,7 +2,7 @@ package nashtech.rookie.uniform.cart.internal.dtos;
 
 import lombok.Builder;
 import lombok.Data;
-import nashtech.rookie.uniform.product.dtos.response.ProductVariantsResponse;
+import nashtech.rookie.uniform.product.dto.response.ProductVariantsResponse;
 
 @Data
 @Builder

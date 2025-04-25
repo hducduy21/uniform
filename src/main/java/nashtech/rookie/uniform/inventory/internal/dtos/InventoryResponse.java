@@ -1,6 +1,6 @@
 package nashtech.rookie.uniform.inventory.internal.dtos;
 
-import nashtech.rookie.uniform.product.dtos.response.ProductVariantsResponse;
+import nashtech.rookie.uniform.product.dto.response.ProductVariantsResponse;
 
 public class InventoryResponse {
     private Long id;

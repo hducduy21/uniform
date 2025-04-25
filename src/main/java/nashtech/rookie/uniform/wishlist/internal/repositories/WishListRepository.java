@@ -1,7 +1,5 @@
 package nashtech.rookie.uniform.wishlist.internal.repositories;
 
-import nashtech.rookie.uniform.product.entities.Product;
-import nashtech.rookie.uniform.user.internal.entities.User;
 import nashtech.rookie.uniform.wishlist.internal.entities.WishList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +13,7 @@ import java.util.UUID;
 public interface WishListRepository extends JpaRepository<WishList, Long> {
     boolean existsByUserIdAndProductId(UUID userId, UUID productId);
 
-    Optional<WishList> findByUserAndProduct(User user, Product product);
+    Optional<WishList> findByUserIdAndProductId(UUID userId, UUID productId);
 
-    Page<WishList> findAllByUser(User user, Pageable pageable);
+    Page<WishList> findAllByUserId(UUID userId, Pageable pageable);
 }

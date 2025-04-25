@@ -2,10 +2,11 @@ package nashtech.rookie.uniform.wishlist.internal.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import nashtech.rookie.uniform.product.entities.Product;
-import nashtech.rookie.uniform.user.internal.entities.User;
+
+import java.util.UUID;
 
 @Entity(name = "wishlists")
+@Table(name = "wishlists", schema = "wishlist")
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,11 +17,9 @@ public class WishList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private UUID userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @Column(nullable = false)
+    private UUID productId;
 }

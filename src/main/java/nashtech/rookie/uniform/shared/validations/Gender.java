@@ -4,7 +4,7 @@ import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
-import nashtech.rookie.uniform.shared.enums.EGender;
+import nashtech.rookie.uniform.user.internal.entities.enums.EGender;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

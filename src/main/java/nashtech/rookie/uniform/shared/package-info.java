@@ -3,7 +3,9 @@
  *
  * @author Hoang Duc Duy
  */
-@ApplicationModule(displayName = "shared")
+@ApplicationModule(
+        displayName = "shared"
+)
 package nashtech.rookie.uniform.shared;
 
 import org.springframework.modulith.ApplicationModule;

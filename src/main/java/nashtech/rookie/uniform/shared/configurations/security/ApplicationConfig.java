@@ -1,9 +1,8 @@
 package nashtech.rookie.uniform.shared.configurations.security;
 
 import lombok.RequiredArgsConstructor;
-import nashtech.rookie.uniform.shared.exceptions.BadCredentialsException;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
-import nashtech.rookie.uniform.user.internal.repositories.UserRepository;
+import nashtech.rookie.uniform.user.api.UserInfoProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,12 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UserRepository userRepository;
+    private final UserInfoProvider userInfoProvider;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return phoneNumber -> userRepository.findByPhoneNumber(phoneNumber).map(CustomUserDetails::new)
-                .orElseThrow(()->new BadCredentialsException("Invalid phone number or password"));
+        return phoneNumber -> new CustomUserDetails(phoneNumber, userInfoProvider);
     }
 
     @Bean

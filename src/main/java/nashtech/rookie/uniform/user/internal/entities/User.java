@@ -2,18 +2,16 @@ package nashtech.rookie.uniform.user.internal.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import nashtech.rookie.uniform.cart.internal.entities.Cart;
-import nashtech.rookie.uniform.shared.enums.EGender;
-import nashtech.rookie.uniform.shared.enums.ERole;
-import nashtech.rookie.uniform.wishlist.internal.entities.WishList;
+import nashtech.rookie.uniform.user.internal.entities.enums.EGender;
+import nashtech.rookie.uniform.user.internal.entities.enums.ERole;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "users")
+@Table(name = "users", schema = "account")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -55,12 +53,6 @@ public class User {
     private Boolean locked = false;
     @Builder.Default
     private Boolean enabled = true;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<WishList> wishlists;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Cart> carts;
 
     @Override
     public final boolean equals(Object o) {

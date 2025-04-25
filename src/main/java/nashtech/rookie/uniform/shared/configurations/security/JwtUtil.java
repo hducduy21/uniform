@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.shared.enums.ErrorCode;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
-import nashtech.rookie.uniform.user.internal.entities.User;
+import nashtech.rookie.uniform.user.api.UserInfoProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +24,8 @@ public class JwtUtil {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
+    private final UserInfoProvider userInfoProvider;
+
     public String generateTokenFromClaimsSet(JWTClaimsSet claimsSet) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS256);
         Payload payload = new Payload(claimsSet.toJSONObject());
@@ -37,7 +39,7 @@ public class JwtUtil {
         }
     }
 
-    public String generateToken(User user) {
+    public String generateToken(UserInfoProvider user) {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())

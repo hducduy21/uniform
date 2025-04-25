@@ -3,7 +3,6 @@ package nashtech.rookie.uniform.auth.internal.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.auth.internal.dtos.request.AuthRequest;
-import nashtech.rookie.uniform.auth.internal.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.auth.internal.dtos.response.TokenPair;
 import nashtech.rookie.uniform.auth.internal.services.AuthService;
 import nashtech.rookie.uniform.shared.dtos.ApiResponse;
@@ -23,10 +22,4 @@ public class AuthController {
         return ResponseUtil.successResponse("Login successful", authService.authenticate(authRequest));
     }
 
-    @PostMapping(path = "/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
-        authService.register(userRegisterRequest);
-        return ResponseUtil.successResponse("Register successfully", null);
-    }
 }

@@ -2,12 +2,12 @@ package nashtech.rookie.uniform.review.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import nashtech.rookie.uniform.product.entities.Product;
-import nashtech.rookie.uniform.user.internal.entities.User;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-@Entity(name = "product_rating")
+@Entity(name = "ratings")
+@Table(name = "ratings", schema = "review")
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,13 +18,11 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @Column(nullable = false)
+    private UUID productId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private UUID userId;
 
     @Column(nullable = false)
     private Integer rating;
