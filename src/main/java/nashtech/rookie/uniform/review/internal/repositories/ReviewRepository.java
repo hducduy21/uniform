@@ -1,6 +1,6 @@
-package nashtech.rookie.uniform.review.repositories;
+package nashtech.rookie.uniform.review.internal.repositories;
 
-import nashtech.rookie.uniform.review.entities.Review;
+import nashtech.rookie.uniform.review.internal.entities.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

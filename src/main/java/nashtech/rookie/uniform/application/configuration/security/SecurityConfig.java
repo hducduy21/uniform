@@ -23,7 +23,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private static final String[] PERMIT_ONLY_GET_ENDPOINTS = {"/api/categories/**", "/api/products/**", "/api/size/**" };
-    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/**" };
+    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/**", "/api/user/register" };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

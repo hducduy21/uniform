@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.review.dtos;
+package nashtech.rookie.uniform.review.internal.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

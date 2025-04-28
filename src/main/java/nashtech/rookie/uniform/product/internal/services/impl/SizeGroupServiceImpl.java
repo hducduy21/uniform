@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.product.internal.services;
+package nashtech.rookie.uniform.product.internal.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.product.internal.dtos.request.SizeRequest;
@@ -6,6 +6,7 @@ import nashtech.rookie.uniform.product.internal.dtos.response.SizeResponse;
 import nashtech.rookie.uniform.product.internal.entities.SizeGroup;
 import nashtech.rookie.uniform.product.internal.mappers.SizeMapper;
 import nashtech.rookie.uniform.product.internal.repositories.SizeGroupRepository;
+import nashtech.rookie.uniform.product.internal.services.SizeGroupService;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;

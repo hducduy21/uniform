@@ -1,6 +1,6 @@
 package nashtech.rookie.uniform.product.internal.mappers;
 
-import nashtech.rookie.uniform.product.dto.response.ProductGeneralResponse;
+import nashtech.rookie.uniform.product.dto.ProductGeneralResponse;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;

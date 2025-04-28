@@ -1,6 +1,6 @@
 package nashtech.rookie.uniform.product.internal.mappers;
 
-import nashtech.rookie.uniform.product.dto.response.ProductVariantsResponse;
+import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
 import nashtech.rookie.uniform.product.internal.entities.ProductVariants;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;

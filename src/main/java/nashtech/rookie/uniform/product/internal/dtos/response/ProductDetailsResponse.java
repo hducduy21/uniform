@@ -2,7 +2,7 @@ package nashtech.rookie.uniform.product.internal.dtos.response;
 
 import lombok.Builder;
 import lombok.Data;
-import nashtech.rookie.uniform.product.dto.response.ProductVariantsResponse;
+import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
 import nashtech.rookie.uniform.product.internal.entities.enums.EProductStatus;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package nashtech.rookie.uniform.wishlist.internal.services;
 
+import nashtech.rookie.uniform.product.dto.ProductGeneralResponse;
 import nashtech.rookie.uniform.wishlist.internal.dtos.WishListRequest;
-import nashtech.rookie.uniform.wishlist.internal.dtos.WishListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,5 +13,5 @@ public interface WishListService {
 
     void removeProductFromWishList(UUID productId);
 
-    Page<WishListResponse> getAllWishList(Pageable pageable);
+    Page<ProductGeneralResponse> getAllWishList(Pageable pageable);
 }

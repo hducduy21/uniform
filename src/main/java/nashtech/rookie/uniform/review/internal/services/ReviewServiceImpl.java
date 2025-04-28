@@ -1,10 +1,10 @@
-package nashtech.rookie.uniform.review.services;
+package nashtech.rookie.uniform.review.internal.services;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
-import nashtech.rookie.uniform.review.dtos.ReviewRequest;
-import nashtech.rookie.uniform.review.entities.Review;
-import nashtech.rookie.uniform.review.repositories.ReviewRepository;
+import nashtech.rookie.uniform.review.internal.dtos.ReviewRequest;
+import nashtech.rookie.uniform.review.internal.entities.Review;
+import nashtech.rookie.uniform.review.internal.repositories.ReviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.inventory.internal.dtos;
+package nashtech.rookie.uniform.inventory.internal.dtos.requests;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

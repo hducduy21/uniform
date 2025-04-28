@@ -2,10 +2,11 @@ package nashtech.rookie.uniform.wishlist.internal.services;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
+import nashtech.rookie.uniform.product.api.ProductServiceProvider;
+import nashtech.rookie.uniform.product.dto.ProductGeneralResponse;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
 import nashtech.rookie.uniform.wishlist.internal.dtos.WishListRequest;
-import nashtech.rookie.uniform.wishlist.internal.dtos.WishListResponse;
 import nashtech.rookie.uniform.wishlist.internal.entities.WishList;
 import nashtech.rookie.uniform.wishlist.internal.mappers.WishListMapper;
 import nashtech.rookie.uniform.wishlist.internal.repositories.WishListRepository;
@@ -14,20 +15,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class WishListImpl implements WishListService {
     private final WishListRepository wishListRepository;
     private final WishListMapper wishListMapper;
+    private final ProductServiceProvider productServiceProvider;
 
     @Transactional
     @Override
     public void addProductToWishList(WishListRequest wishListRequest) {
         UUID userId = getCurrentUserId();
 
-        // client: fetch to get products
+        if(!productServiceProvider.productExists(wishListRequest.getProductId())){
+            throw new ResourceNotFoundException("Product not found");
+        }
 
         if (wishListRepository.existsByUserIdAndProductId(userId, wishListRequest.getProductId())) {
             throw new BadRequestException("Product already in wish list");
@@ -49,12 +56,13 @@ public class WishListImpl implements WishListService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<WishListResponse> getAllWishList(Pageable pageable) {
+    public Page<ProductGeneralResponse> getAllWishList(Pageable pageable) {
         UUID user = getCurrentUserId();
 
-        Page<WishList> wishLists = wishListRepository.findAllByUserId(user,pageable);
+        Collection<WishList> wishLists = wishListRepository.findAllByUserId(user);
+        Set<UUID> productIds = wishLists.stream().map(WishList::getProductId).collect(Collectors.toSet());
 
-        return wishLists.map(wishListMapper::wishListToWishListResponse);
+        return productServiceProvider.getProductsByIds(productIds, pageable);
     }
 
     private void saveWishList(WishList wishList) {

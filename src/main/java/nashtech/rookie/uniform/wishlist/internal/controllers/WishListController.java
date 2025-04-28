@@ -2,10 +2,10 @@ package nashtech.rookie.uniform.wishlist.internal.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.product.dto.ProductGeneralResponse;
 import nashtech.rookie.uniform.shared.dtos.ApiResponse;
 import nashtech.rookie.uniform.shared.utils.ResponseUtil;
 import nashtech.rookie.uniform.wishlist.internal.dtos.WishListRequest;
-import nashtech.rookie.uniform.wishlist.internal.dtos.WishListResponse;
 import nashtech.rookie.uniform.wishlist.internal.services.WishListService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +38,7 @@ public class WishListController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<Page<WishListResponse>> getAllWishList(@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ApiResponse<Page<ProductGeneralResponse>> getAllWishList(@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseUtil.successResponse(wishListService.getAllWishList(pageable));
     }
 }

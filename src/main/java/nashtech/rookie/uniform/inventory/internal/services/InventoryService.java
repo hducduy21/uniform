@@ -1,8 +1,8 @@
 package nashtech.rookie.uniform.inventory.internal.services;
 
-import nashtech.rookie.uniform.inventory.internal.dtos.InventoryRequest;
-import nashtech.rookie.uniform.inventory.internal.dtos.InventoryResponse;
-import nashtech.rookie.uniform.inventory.internal.dtos.InventoryUpdationRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdationRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.response.InventoryResponse;
 
 import java.util.List;
 

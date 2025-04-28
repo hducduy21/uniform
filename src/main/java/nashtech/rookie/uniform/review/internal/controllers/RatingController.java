@@ -1,9 +1,9 @@
-package nashtech.rookie.uniform.review.controllers;
+package nashtech.rookie.uniform.review.internal.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import nashtech.rookie.uniform.review.dtos.ReviewRequest;
-import nashtech.rookie.uniform.review.services.ReviewService;
+import nashtech.rookie.uniform.review.internal.dtos.ReviewRequest;
+import nashtech.rookie.uniform.review.internal.services.ReviewService;
 import nashtech.rookie.uniform.shared.dtos.ApiResponse;
 import nashtech.rookie.uniform.shared.utils.ResponseUtil;
 import org.springframework.http.HttpStatus;

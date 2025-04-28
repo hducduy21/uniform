@@ -5,7 +5,7 @@
  */
 @ApplicationModule(
         displayName = "cart",
-        allowedDependencies = {"product::*", "user::*", "shared::*"}
+        allowedDependencies = {"product::*", "user::*", "shared::*", "application::*"}
 )
 package nashtech.rookie.uniform.cart;
 

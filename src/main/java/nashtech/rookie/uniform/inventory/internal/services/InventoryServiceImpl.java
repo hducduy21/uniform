@@ -1,12 +1,13 @@
 package nashtech.rookie.uniform.inventory.internal.services;
 
 import lombok.RequiredArgsConstructor;
-import nashtech.rookie.uniform.inventory.internal.dtos.InventoryRequest;
-import nashtech.rookie.uniform.inventory.internal.dtos.InventoryResponse;
-import nashtech.rookie.uniform.inventory.internal.dtos.InventoryUpdationRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdationRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.response.InventoryResponse;
 import nashtech.rookie.uniform.inventory.internal.entities.Inventory;
 import nashtech.rookie.uniform.inventory.internal.mappers.InventoryMapper;
 import nashtech.rookie.uniform.inventory.internal.repositories.InventoryRepository;
+import nashtech.rookie.uniform.product.api.ProductServiceProvider;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,16 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
 
+    private final ProductServiceProvider productServiceProvider;
+
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse createInventory(InventoryRequest inventoryRequest) {
 
-        // client: get variants if the product variant exists
+        if(!productServiceProvider.productVariantsExists(inventoryRequest.getProductVariantsId())) {
+            throw new ResourceNotFoundException("Product not found");
+        }
 
         Inventory inventory = inventoryMapper.inventoryRequestToInventory(inventoryRequest);
         inventory.setProductVariantsId(inventoryRequest.getProductVariantsId());

@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.product.internal.services;
+package nashtech.rookie.uniform.product.internal.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
@@ -17,6 +17,7 @@ import nashtech.rookie.uniform.product.internal.repositories.ProductVariantsRepo
 import nashtech.rookie.uniform.product.internal.repositories.SizeGroupRepository;
 import nashtech.rookie.uniform.product.internal.repositories.specs.AdminProductSpecificationBuilder;
 import nashtech.rookie.uniform.product.internal.repositories.specs.UserProductSpecificationBuilder;
+import nashtech.rookie.uniform.product.internal.services.ProductService;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;

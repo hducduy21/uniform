@@ -6,7 +6,7 @@
  */
 @ApplicationModule(
         displayName = "Authentication",
-        allowedDependencies = {"shared::*"}
+        allowedDependencies = {"shared::*", "application::security"}
 )
 package nashtech.rookie.uniform.auth;
 

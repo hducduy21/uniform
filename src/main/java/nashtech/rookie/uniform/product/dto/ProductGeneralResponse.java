@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.product.dto.response;
+package nashtech.rookie.uniform.product.dto;
 
 import lombok.Builder;
 import lombok.Data;

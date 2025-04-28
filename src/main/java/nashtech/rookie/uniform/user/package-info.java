@@ -3,7 +3,7 @@
  *
  * @author Hoang Duc Duy
  */
-@ApplicationModule(displayName = "User", allowedDependencies = {"shared::*"})
+@ApplicationModule(displayName = "User", allowedDependencies = {"shared::*", "application::*"})
 package nashtech.rookie.uniform.user;
 
 import org.springframework.modulith.ApplicationModule;

@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.review.entities;
+package nashtech.rookie.uniform.review.internal.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

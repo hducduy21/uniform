@@ -3,6 +3,7 @@ package nashtech.rookie.uniform.cart.internal.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name="carts")
@@ -25,4 +26,7 @@ public class Cart {
 
     @Builder.Default
     private Integer quantity = 1;
+
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 }
