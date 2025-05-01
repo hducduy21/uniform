@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.configurations;
+package nashtech.rookie.uniform.application.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

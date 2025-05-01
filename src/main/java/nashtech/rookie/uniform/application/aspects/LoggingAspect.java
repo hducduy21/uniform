@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.aspects;
+package nashtech.rookie.uniform.application.aspects;
 
 import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.shared.dtos.ApiResponse;

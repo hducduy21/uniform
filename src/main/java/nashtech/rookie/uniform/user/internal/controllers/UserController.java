@@ -2,8 +2,6 @@ package nashtech.rookie.uniform.user.internal.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import nashtech.rookie.uniform.shared.dtos.ApiResponse;
-import nashtech.rookie.uniform.shared.utils.ResponseUtil;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.user.internal.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,9 +16,8 @@ public class UserController {
 
     @PostMapping(path = "/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
+    public void register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
         userService.createUser(userRegisterRequest);
-        return ResponseUtil.successResponse("Register successfully", null);
     }
 
 }

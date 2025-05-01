@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.services;
+package nashtech.rookie.uniform.application.services;
 
 import org.springframework.web.multipart.MultipartFile;
 

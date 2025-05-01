@@ -1,4 +1,4 @@
-package nashtech.rookie.uniform.shared.configurations;
+package nashtech.rookie.uniform.application.configuration;
 
 import nashtech.rookie.uniform.shared.dtos.ApiResponse;
 import nashtech.rookie.uniform.shared.exceptions.ApplicationException;

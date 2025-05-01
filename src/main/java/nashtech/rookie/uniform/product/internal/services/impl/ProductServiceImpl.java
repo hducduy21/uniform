@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.product.internal.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.application.services.StorageService;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
@@ -21,7 +22,6 @@ import nashtech.rookie.uniform.product.internal.services.ProductService;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
-import nashtech.rookie.uniform.shared.services.StorageService;
 import nashtech.rookie.uniform.shared.utils.FileUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

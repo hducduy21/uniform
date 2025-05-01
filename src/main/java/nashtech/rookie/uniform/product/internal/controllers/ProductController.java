@@ -7,8 +7,6 @@ import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.product.internal.services.ProductService;
-import nashtech.rookie.uniform.shared.dtos.ApiResponse;
-import nashtech.rookie.uniform.shared.utils.ResponseUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,17 +26,17 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<Page<ProductResponse>> getAllProducts(
+    public Page<ProductResponse> getAllProducts(
             @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable,
             @ModelAttribute ProductFilter productFilter
             ) {
-        return ResponseUtil.successResponse(productService.getProducts(pageable, productFilter));
+        return productService.getProducts(pageable, productFilter);
     }
 
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<ProductResponse> getProductById(@PathVariable UUID productId) {
-        return ResponseUtil.successResponse(productService.getProductById(productId));
+    public ProductResponse getProductById(@PathVariable UUID productId) {
+        return productService.getProductById(productId);
     }
 
     @GetMapping(value = "/{productId}/image", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -49,34 +47,31 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
-        return ResponseUtil.successResponse(productService.createProduct(productRequest));
+    public ProductResponse createProduct(@RequestBody @Valid ProductRequest productRequest) {
+        return productService.createProduct(productRequest);
     }
 
     @PatchMapping("/{productId}/image")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> uploadProductImage(@PathVariable UUID productId, @RequestPart MultipartFile file) {
+    public void uploadProductImage(@PathVariable UUID productId, @RequestPart MultipartFile file) {
         productService.uploadProductImage(productId, file);
-        return ResponseUtil.successResponse("Image uploaded successfully");
     }
 
     @PatchMapping("/{productId}/variants/image")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> uploadProductVariantsImage(@PathVariable UUID productId, @ModelAttribute ListVariantsImageUploadationRequest files) {
+    public void uploadProductVariantsImage(@PathVariable UUID productId, @ModelAttribute ListVariantsImageUploadationRequest files) {
         productService.uploadProductVariantsImage(productId, files);
-        return ResponseUtil.successResponse("Images uploaded successfully");
     }
 
     @PutMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<ProductResponse> updateProduct(@PathVariable UUID productId, @RequestBody @Valid ProductRequest productRequest) {
-        return ResponseUtil.successResponse(productService.updateProduct(productId, productRequest));
+    public ProductResponse updateProduct(@PathVariable UUID productId, @RequestBody @Valid ProductRequest productRequest) {
+        return productService.updateProduct(productId, productRequest);
     }
 
     @DeleteMapping("/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ApiResponse<Void> deleteProduct(@PathVariable UUID productId) {
+    public void deleteProduct(@PathVariable UUID productId) {
         productService.deleteProduct(productId);
-        return ResponseUtil.successResponse(null);
     }
 }

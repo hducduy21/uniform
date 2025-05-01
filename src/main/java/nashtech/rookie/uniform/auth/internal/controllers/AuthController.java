@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.auth.internal.dtos.request.AuthRequest;
 import nashtech.rookie.uniform.auth.internal.dtos.response.AuthResponse;
 import nashtech.rookie.uniform.auth.internal.services.AuthService;
-import nashtech.rookie.uniform.shared.dtos.ApiResponse;
-import nashtech.rookie.uniform.shared.utils.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +16,8 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest authRequest) {
-        return ResponseUtil.successResponse("Login successful", authService.authenticate(authRequest));
+    public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
+        return authService.authenticate(authRequest);
     }
 
 }
