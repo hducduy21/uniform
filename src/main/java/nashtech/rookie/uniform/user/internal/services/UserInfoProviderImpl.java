@@ -18,8 +18,8 @@ public class UserInfoProviderImpl implements UserInfoProvider {
     private final UserMapper userMapper;
 
     @Override
-    public UserInfoDto getUserInfo(String phoneNumber) {
-        return userMapper.userToUserInfoDto(getUser(phoneNumber));
+    public UserInfoDto getUserInfo(String email) {
+        return userMapper.userToUserInfoDto(getUser(email));
     }
 
     @Override
@@ -62,8 +62,8 @@ public class UserInfoProviderImpl implements UserInfoProvider {
         }
     }
 
-    private User getUser(String phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with phone: " + phoneNumber));
+    private User getUser(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with phone: " + email));
     }
 }

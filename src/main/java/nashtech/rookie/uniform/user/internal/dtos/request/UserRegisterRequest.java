@@ -16,9 +16,11 @@ import java.time.LocalDateTime;
 @Data
 @PasswordMatches
 public class UserRegisterRequest {
-    @NotBlank(message = "Full name is required.")
-    @Size(min = 10, max = 50, message = "Name must be between 2 and 50 characters")
-    private String fullName;
+    @NotBlank(message = "First name is required.")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required.")
+    private String lastName;
 
     @NotBlank(message = "Email is required.")
     @Email(message = "Invalid email format")

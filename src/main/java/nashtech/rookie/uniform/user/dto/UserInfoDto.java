@@ -13,7 +13,8 @@ public class UserInfoDto {
     private String email;
     private String password;
     private String phoneNumber;
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private LocalDate birthDate;
     private String gender;
     private String role;

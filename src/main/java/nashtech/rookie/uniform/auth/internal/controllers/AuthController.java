@@ -3,7 +3,7 @@ package nashtech.rookie.uniform.auth.internal.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.auth.internal.dtos.request.AuthRequest;
-import nashtech.rookie.uniform.auth.internal.dtos.response.TokenPair;
+import nashtech.rookie.uniform.auth.internal.dtos.response.AuthResponse;
 import nashtech.rookie.uniform.auth.internal.services.AuthService;
 import nashtech.rookie.uniform.shared.dtos.ApiResponse;
 import nashtech.rookie.uniform.shared.utils.ResponseUtil;
@@ -18,7 +18,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<TokenPair> login(@RequestBody @Valid AuthRequest authRequest) {
+    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest authRequest) {
         return ResponseUtil.successResponse("Login successful", authService.authenticate(authRequest));
     }
 

@@ -20,7 +20,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return phoneNumber -> new CustomUserDetails(userInfoProvider.getUserInfo(phoneNumber));
+        return email -> new CustomUserDetails(userInfoProvider.getUserInfo(email));
     }
 
     @Bean

@@ -19,7 +19,9 @@ public class UserGeneralResponse {
 
     private String phoneNumber;
 
-    private String fullName;
+    private String firstName;
+
+    private String lastName;
 
     private LocalDate birthDate;
 

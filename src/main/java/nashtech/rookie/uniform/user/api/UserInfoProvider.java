@@ -5,7 +5,7 @@ import nashtech.rookie.uniform.user.dto.UserInfoDto;
 import java.util.UUID;
 
 public interface UserInfoProvider {
-    UserInfoDto getUserInfo(String phoneNumber);
+    UserInfoDto getUserInfo(String email);
 
     String getEmail(String phoneNumber);
     String getPassword(String phoneNumber);
