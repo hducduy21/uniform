@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.product.internal.dtos.request.CategoryRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryDetailResponse;
-import nashtech.rookie.uniform.product.internal.dtos.response.CategoryGeneralResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryResponse;
 import nashtech.rookie.uniform.product.internal.entities.enums.ECategotyStatus;
 import nashtech.rookie.uniform.product.internal.services.CategoryService;
@@ -21,8 +20,14 @@ public class CategoryController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<CategoryGeneralResponse> getAllCategories() {
+    public Collection<CategoryResponse> getAllCategories() {
         return categoryService.getAllCategories();
+    }
+
+    @GetMapping("/detail")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<CategoryDetailResponse> getAllDetailCategories() {
+        return categoryService.getAllDetailCategories();
     }
 
     @GetMapping("/{categoryId}")

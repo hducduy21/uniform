@@ -23,7 +23,7 @@ public class Product {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String productCode;
+    private String code;
 
     @Column(nullable = false)
     private String name;
@@ -34,6 +34,9 @@ public class Product {
 
     private String imageUrl;
 
+    @Builder.Default
+    private Long views = 0L;
+
     @Column(nullable = false)
     private Double price;
 
@@ -41,15 +44,16 @@ public class Product {
     @Builder.Default
     private EProductStatus status = EProductStatus.UPCOMING;
 
-    @Builder.Default
-    private float rating = 0;
-
     @Column(nullable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
     private String createdBy;
     private LocalDateTime updatedAt;
     private String lastUpdatedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "size_type_id", nullable = false)
+    private SizeGroup sizeType;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ProductVariants> productVariants;

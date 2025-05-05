@@ -43,20 +43,21 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             }
             String token = StringUtils.substring(authHeader, 7);
 
-            //extract phoneNumber to identify user and push it to context holder
-            String phoneNumber = jwtUtil.extractClaim(token, "phoneNumber");
-            if(phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //extract email to identify user and push it to context holder
+            String email = jwtUtil.extractClaim(token, "email");
+            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 String userId = jwtUtil.extractClaim(token, "userId");
                 MDC.put("userId", userId);
 
-                CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(phoneNumber);
+                CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
             filterChain.doFilter(request, response);
         }
-        finally {
+        catch (Exception e) {
+            filterChain.doFilter(request, response);
             MDC.clear();
         }
     }

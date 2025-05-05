@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
     JWT_GENEREATE_ERROR(1301,""),
-    JWT_EXTRACT_CLAIM(1032, "");
+    JWT_EXTRACT_CLAIM(1032, ""),
+    JWT_VALIDATE_TOKEN(1033, "");
 
     private final int code;
     private final String message;

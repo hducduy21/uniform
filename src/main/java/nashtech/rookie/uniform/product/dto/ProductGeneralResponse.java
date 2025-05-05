@@ -11,8 +11,10 @@ import java.util.UUID;
 @Builder
 public class ProductGeneralResponse {
     private UUID id;
-    private String productCode;
+    private String code;
     private String name;
+    private Long views;
+
     private String imageUrl;
     private Set<CategoryResponse> categories;
 }

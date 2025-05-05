@@ -16,7 +16,7 @@ import java.util.Set;
 @Data
 public class ProductRequest {
     @NotBlank
-    private String productCode;
+    private String code;
 
     @NotBlank
     private String name;
@@ -24,6 +24,8 @@ public class ProductRequest {
     private String material;
     private String description;
     private EProductStatus status;
+
+    private Set<Long> categoryIds;
 
     @NotNull
     @PositiveOrZero

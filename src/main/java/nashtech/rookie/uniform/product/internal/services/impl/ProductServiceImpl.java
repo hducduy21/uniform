@@ -3,16 +3,20 @@ package nashtech.rookie.uniform.product.internal.services.impl;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.services.StorageService;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
+import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
+import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
+import nashtech.rookie.uniform.product.internal.entities.Category;
 import nashtech.rookie.uniform.product.internal.entities.Product;
 import nashtech.rookie.uniform.product.internal.entities.ProductVariants;
 import nashtech.rookie.uniform.product.internal.entities.SizeGroup;
 import nashtech.rookie.uniform.product.internal.entities.enums.EProductStatus;
 import nashtech.rookie.uniform.product.internal.mappers.ProductMapper;
 import nashtech.rookie.uniform.product.internal.mappers.ProductVariantsMapper;
+import nashtech.rookie.uniform.product.internal.repositories.CategoryRepository;
 import nashtech.rookie.uniform.product.internal.repositories.ProductRepository;
 import nashtech.rookie.uniform.product.internal.repositories.ProductVariantsRepository;
 import nashtech.rookie.uniform.product.internal.repositories.SizeGroupRepository;
@@ -33,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +45,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final SizeGroupRepository sizeGroupRepository;
     private final ProductVariantsRepository productVariantsRepository;
+    private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
     private final StorageService awsS3Service;
     private final ProductVariantsMapper productVariantsMapper;
@@ -66,24 +72,35 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public ProductResponse getProductById(UUID productId) {
-        return productMapper.productToProductResponse(getProduct(productId));
+        Product product = getProduct(productId);
+        product.setViews(product.getViews() + 1);
+
+        return productMapper.productToProductResponse(product);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Transactional(readOnly = true)
+    @Override
+    public ProductDetailsResponse getProductDetailById(UUID productId) {
+        return productMapper.productToProductDetailsResponse(getProduct(productId));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @Override
-    public ProductResponse createProduct(ProductRequest productRequest) {
+    public UUID createProduct(ProductRequest productRequest) {
         SizeGroup sizeType = getSizes(productRequest.getSizeTypeId());
-
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllByIdIn(productRequest.getCategoryIds()));
         Product product = productMapper.productRequestToProduct(productRequest);
 
+        product.setCategories(categories);
+        product.setSizeType(sizeType);
         product.setCreatedBy(SecurityUtil.getCurrentUserEmail());
-
         product = saveProduct(product);
 
         createProductVariants(product, productRequest.getHexColors(), sizeType.getElements());
 
-        return productMapper.productToProductResponse(product);
+        return product.getId();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -119,6 +136,13 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception e){
             throw new InternalServerErrorException("Error uploading profile image! Please try later.");
         }
+    }
+
+    @Override
+    public Collection<ProductVariantsResponse> getProductVariantsByProductId(UUID productId) {
+        return productVariantsRepository
+                .findAllByProduct_Id(productId).stream()
+                .map(productVariantsMapper::productVariantsToResponse).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -30,13 +30,13 @@ public class SizeGroupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SizeResponse createSizeGroup(@RequestBody @Valid SizeRequest sizeResponse) {
-        return sizeGroupService.createSize(sizeResponse);
+    public SizeResponse createSizeGroup(@RequestBody @Valid SizeRequest sizeRequest) {
+        return sizeGroupService.createSize(sizeRequest);
     }
 
     @PutMapping("/{sizeId}")
     @ResponseStatus(HttpStatus.OK)
-    public SizeResponse updateSizeGroup(@PathVariable Integer sizeId, @RequestBody @Valid SizeRequest sizeResponse) {
-        return sizeGroupService.updateSize(sizeId, sizeResponse);
+    public SizeResponse updateSizeGroup(@PathVariable Integer sizeId, @RequestBody @Valid SizeRequest sizeRequest) {
+        return sizeGroupService.updateSize(sizeId, sizeRequest);
     }
 }

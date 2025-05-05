@@ -25,6 +25,9 @@ public class Category {
 
     private String description;
 
+    @Builder.Default
+    private boolean isRoot = false;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ECategotyStatus status = ECategotyStatus.UPCOMING;

@@ -55,9 +55,10 @@ public class JwtUtil {
         return generateTokenFromClaimsSet(jwtClaimsSet);
     }
 
-    public String generateToken() {
+    public String generateToken(String email) {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .issuer("uniform.com")
+                .claim("email", email)
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(7, ChronoUnit.DAYS).toEpochMilli()
@@ -85,6 +86,7 @@ public class JwtUtil {
             }
             return claims;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new InternalServerErrorException(ErrorCode.JWT_EXTRACT_CLAIM.getCode());
         }
     }

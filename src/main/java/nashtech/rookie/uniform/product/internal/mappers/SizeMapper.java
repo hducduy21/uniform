@@ -7,7 +7,6 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface SizeMapper {
-    @Mapping(target = "sizeTitle", source = "name")
     @Mapping(target = "elements", source = "elements")
     SizeGroup sizeRequestToSize(SizeRequest sizeRequest);
     SizeResponse sizeToSizeResponse(SizeGroup size);

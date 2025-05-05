@@ -6,6 +6,7 @@ import nashtech.rookie.uniform.user.internal.entities.enums.EGender;
 import nashtech.rookie.uniform.user.internal.entities.enums.ERole;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -40,7 +41,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private EGender gender;
 
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

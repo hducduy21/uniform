@@ -19,7 +19,7 @@ public class SizeGroup {
     private Integer id;
 
     @Column(nullable = false)
-    private String sizeTitle;
+    private String name;
 
     @ElementCollection
     private List<String> elements;

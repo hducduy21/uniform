@@ -13,18 +13,21 @@ import java.util.UUID;
 @Builder
 public class ProductDetailsResponse {
     private UUID id;
-    private String productCode;
+    private String code;
     private String name;
     private String material;
     private String description;
     private String imageUrl;
     private EProductStatus status;
     private float rating;
-
+    private Long views;
+    private Double price;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime updatedAt;
     private String lastUpdatedBy;
+
+    private SizeResponse sizeType;
 
     private Set<ProductVariantsResponse> productVariants;
 

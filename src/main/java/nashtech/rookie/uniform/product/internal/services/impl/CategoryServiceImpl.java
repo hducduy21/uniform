@@ -4,20 +4,20 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.product.internal.dtos.request.CategoryRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryDetailResponse;
-import nashtech.rookie.uniform.product.internal.dtos.response.CategoryGeneralResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryResponse;
 import nashtech.rookie.uniform.product.internal.entities.Category;
 import nashtech.rookie.uniform.product.internal.entities.enums.ECategotyStatus;
 import nashtech.rookie.uniform.product.internal.mappers.CategoryMapper;
 import nashtech.rookie.uniform.product.internal.repositories.CategoryRepository;
 import nashtech.rookie.uniform.product.internal.services.CategoryService;
+import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +27,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CategoryGeneralResponse> getAllCategories() {
+    public Collection<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll()
                 .stream()
-                .map(categoryMapper::categoryToCategoryGeneralResponse)
+                .map(categoryMapper::categoryToCategoryResponse)
+                .toList();
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<CategoryDetailResponse> getAllDetailCategories() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(categoryMapper::categoryToCategoryDetailResponse)
                 .toList();
     }
 
@@ -64,6 +73,15 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDetailResponse updateCategory(Long id, CategoryRequest categoryRequest) {
         Category category = getCategory(id);
         categoryMapper.updateCategoryFromRequest(category, categoryRequest);
+
+        //Set parent category
+        if(categoryRequest.getParent().equals(category.getId())) {
+            throw new BadRequestException("Category cannot be its own parent");
+        }
+        if(!categoryRequest.getParent().equals(category.getParent().getId())){
+            Category parent = getCategory(categoryRequest.getParent());
+            category.setParent(parent);
+        }
 
         category.setUpdatedBy(SecurityUtil.getCurrentUserEmail());
         category.setUpdatedAt(LocalDateTime.now());

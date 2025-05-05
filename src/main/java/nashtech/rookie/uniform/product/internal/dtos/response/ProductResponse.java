@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 public class ProductResponse {
     private UUID id;
-    private String productCode;
+    private String code;
     private String name;
     private String material;
     private String description;
@@ -18,4 +18,5 @@ public class ProductResponse {
     private EProductStatus status;
     private Double price;
     private float rating;
+    private Long views;
 }

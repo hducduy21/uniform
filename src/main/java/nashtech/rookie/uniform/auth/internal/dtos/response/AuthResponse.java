@@ -9,10 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class AuthResponse {
     private TokenPair tokens;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private String role;
-    private String gender;
+    private UserResponse user;
 }

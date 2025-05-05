@@ -9,6 +9,6 @@ import java.util.List;
 @Builder
 public class SizeResponse {
     private Integer id;
-    private String sizeTitle;
+    private String name;
     private List<String> elements;
 }
