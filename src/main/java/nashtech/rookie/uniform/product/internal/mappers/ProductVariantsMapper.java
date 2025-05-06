@@ -8,6 +8,7 @@ import nashtech.rookie.uniform.shared.utils.FileUtil;
 import org.mapstruct.Mapper;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,5 +34,21 @@ public interface ProductVariantsMapper {
                         ListVariantsImageUploadationRequest.VariantsImageUploadationRequest::getImage,
                         (existing, replacement) -> existing
                 ));
+    }
+
+    default Collection<ProductVariantsResponse> productVariantsToResponses(
+            Collection<ProductVariants> productVariants,
+            Map<Long, Integer> quantityInStocks
+    ) {
+        if (productVariants == null) {
+            return null;
+        }
+
+        return productVariants.stream()
+                .map(productVariant -> {
+                    ProductVariantsResponse productVariantsResponse = productVariantsToResponse(productVariant);
+                    productVariantsResponse.setQuantityInStock(quantityInStocks.getOrDefault(productVariant.getId(), 0));
+                    return productVariantsResponse;
+                }).toList();
     }
 }

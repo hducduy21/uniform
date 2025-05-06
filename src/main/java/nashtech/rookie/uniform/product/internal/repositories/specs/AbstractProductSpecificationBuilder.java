@@ -1,9 +1,11 @@
 package nashtech.rookie.uniform.product.internal.repositories.specs;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
+import nashtech.rookie.uniform.product.internal.entities.Category;
 import nashtech.rookie.uniform.product.internal.entities.Product;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -40,7 +42,8 @@ public abstract class AbstractProductSpecificationBuilder {
 
     protected void addCategoryPredicate(Root<Product> root, List<Predicate> predicates, ProductFilter filter) {
         if (isNonEmpty(filter.getCategories())) {
-            predicates.add(root.get("category").in(filter.getCategories()));
+            Join<Product, Category> categoryJoin = root.join("category");
+            predicates.add(categoryJoin.get("id").in(filter.getCategories()));
         }
     }
 

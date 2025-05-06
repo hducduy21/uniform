@@ -3,10 +3,12 @@ package nashtech.rookie.uniform.product.internal.services.impl;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.services.StorageService;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
+import nashtech.rookie.uniform.inventory.api.InventoryProvider;
 import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
+import nashtech.rookie.uniform.product.internal.dtos.request.ProductVariantsRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.product.internal.entities.Category;
@@ -36,8 +38,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -47,10 +51,11 @@ public class ProductServiceImpl implements ProductService {
     private final ProductVariantsRepository productVariantsRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
-    private final StorageService awsS3Service;
+    private final StorageService storageService;
     private final ProductVariantsMapper productVariantsMapper;
     private final AdminProductSpecificationBuilder adminProductSpecificationBuilder;
     private final UserProductSpecificationBuilder userProductSpecificationBuilder;
+    private final InventoryProvider inventoryProvider;
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -90,16 +95,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public UUID createProduct(ProductRequest productRequest) {
         SizeGroup sizeType = getSizes(productRequest.getSizeTypeId());
-        Set<Category> categories = new HashSet<>(categoryRepository.findAllByIdIn(productRequest.getCategoryIds()));
+        Category category = getCategory(productRequest.getCategoryId());
         Product product = productMapper.productRequestToProduct(productRequest);
 
-        product.setCategories(categories);
+        product.setCategory(category);
         product.setSizeType(sizeType);
         product.setCreatedBy(SecurityUtil.getCurrentUserEmail());
         product = saveProduct(product);
 
         createProductVariants(product, productRequest.getHexColors(), sizeType.getElements());
-
         return product.getId();
     }
 
@@ -129,9 +133,9 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = getProduct(productId);
         String folder = productId.toString();
-        String fileName = productId + FileUtil.getFileExtension(file.getOriginalFilename());
+        String fileName = productId.toString();
         try {
-            awsS3Service.uploadFile(fileName, folder, file);
+            storageService.uploadFile(fileName, folder, file);
             saveProduct(product);
         }catch (Exception e){
             throw new InternalServerErrorException("Error uploading profile image! Please try later.");
@@ -140,9 +144,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Collection<ProductVariantsResponse> getProductVariantsByProductId(UUID productId) {
-        return productVariantsRepository
-                .findAllByProduct_Id(productId).stream()
-                .map(productVariantsMapper::productVariantsToResponse).collect(Collectors.toList());
+        Collection<ProductVariants> productVariants = productVariantsRepository.findAllByProduct_Id(productId);
+
+        Map<Long, Integer> quantityInStocks = inventoryProvider.getInventoryQuantityByProductVariantIds(
+                productVariants.stream()
+                        .map(ProductVariants::getId)
+                        .toList()
+        );
+        return productVariantsMapper.productVariantsToResponses(productVariants, quantityInStocks);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -151,7 +160,7 @@ public class ProductServiceImpl implements ProductService {
     public void uploadProductVariantsImage(UUID productId, ListVariantsImageUploadationRequest listVariantsImageUploadationRequest) {
         String folder = productId.toString();
         Map<String, MultipartFile> files = productVariantsMapper.toImageMap(listVariantsImageUploadationRequest.getImages());
-        awsS3Service.uploadFiles(files, folder);
+        storageService.uploadFiles(files, folder);
     }
 
     @Transactional(readOnly = true)
@@ -161,7 +170,7 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException("Product not found");
         }
         try{
-            return awsS3Service.getByte(productId.toString(), productId.toString());
+            return storageService.getByte(productId.toString(), productId.toString());
         }catch (Exception e){
             throw new InternalServerErrorException("Error getting product image! Please try later.");
         }
@@ -179,9 +188,35 @@ public class ProductServiceImpl implements ProductService {
         saveProduct(product);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Transactional
+    @Override
+    public void updateProductVariant(UUID productId, ProductVariantsRequest productVariantsRequest) {
+        Collection<ProductVariants> productVariants = productVariantsRepository.findAllByProduct_Id(productId);
+
+        if (productVariants.isEmpty()) {
+            throw new ResourceNotFoundException("Product variants not found");
+        }
+
+        productVariants.stream()
+                .filter(variant ->
+                        productVariantsRequest.getProductVariantCostPriceMap()
+                                .containsKey(variant.getId()))
+                .forEach(variant -> variant.setCostPrice(
+                        productVariantsRequest.getProductVariantCostPriceMap()
+                                .get(variant.getId())));
+
+        productVariantsRepository.saveAll(productVariants);
+    }
+
     private Product getProduct(UUID productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+    }
+
+    private Category getCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     private boolean isProductExists(UUID productId) {
@@ -198,18 +233,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void createProductVariants(Product product, Collection<String> hexCodes, Collection<String> sizes) {
-        List<ProductVariants> productVariantsList = new ArrayList<>();
-        for (String size : sizes) {
-            for (String color : hexCodes) {
-                ProductVariants productVariants = ProductVariants.builder()
-                        .color(color)
-                        .size(size)
-                        .product(product)
-                        .costPrice(product.getPrice())
-                        .build();
-                productVariantsList.add(productVariants);
-            }
-        }
+        List<ProductVariants> productVariantsList = sizes.stream()
+                .flatMap(size -> hexCodes.stream()
+                        .map(color -> ProductVariants.builder()
+                                .color(color)
+                                .size(size)
+                                .product(product)
+                                .costPrice(product.getPrice())
+                                .build()))
+                .toList();
 
         productVariantsRepository.saveAll(productVariantsList);
     }

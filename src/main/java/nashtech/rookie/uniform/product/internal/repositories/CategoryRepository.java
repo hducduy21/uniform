@@ -8,12 +8,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    Collection<Category> findAllByIdIn(Set<Long> categoryIds);
 
     @EntityGraph(attributePaths = {"parent"})
     List<Category> findAll();
+
+    @EntityGraph(attributePaths = {"parent"})
+    List<Category> findAllByIdIn(Collection<Long> ids);
+
+    List<Category> findAllByIsRoot(boolean root);
+
+    List<Category> findAllByParent_Id(Long parentId);
 }

@@ -4,6 +4,7 @@ import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
+import nashtech.rookie.uniform.product.internal.dtos.request.ProductVariantsRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
 import org.springframework.data.domain.Page;
@@ -33,4 +34,7 @@ public interface ProductService {
     byte[] getProductImageById(UUID productId);
 
     Collection<ProductVariantsResponse> getProductVariantsByProductId(UUID productId);
+
+    void updateProductVariant(UUID productId, ProductVariantsRequest productVariantsRequest);
+
 }

@@ -2,17 +2,47 @@ package nashtech.rookie.uniform.user.internal.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.user.internal.dtos.request.UserFilter;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserRegisterRequest;
+import nashtech.rookie.uniform.user.internal.dtos.request.UserUpdateRequest;
+import nashtech.rookie.uniform.user.internal.dtos.response.UserDetailResponse;
 import nashtech.rookie.uniform.user.internal.services.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Page<UserDetailResponse> getUser(
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable,
+            @ModelAttribute UserFilter userFilter
+    ) {
+        return userService.getAllUser(pageable, userFilter);
+    }
+
+    @GetMapping("/profile")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDetailResponse getUserProfile() {
+        return userService.getUserProfile();
+    }
+
+    @PutMapping("/profile")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUserProfile(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
+        userService.updateUser(userUpdateRequest);
+    }
 
     @PostMapping(path = "/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -20,4 +50,9 @@ public class UserController {
         userService.createUser(userRegisterRequest);
     }
 
+    @PatchMapping("/{id}/lock")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUserLockStatus(@PathVariable UUID id, @RequestParam boolean lock) {
+        userService.updateLockedUser(id, lock);
+    }
 }

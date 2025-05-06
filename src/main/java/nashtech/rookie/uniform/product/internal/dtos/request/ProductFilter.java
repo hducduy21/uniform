@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class ProductFilter {
     private String search;
-    private List<String> categories;
+    private List<Long> categories;
     private Double minPrice;
     private Double maxPrice;
     private List<String> status;

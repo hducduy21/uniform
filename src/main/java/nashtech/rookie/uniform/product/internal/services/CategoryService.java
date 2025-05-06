@@ -9,6 +9,7 @@ import java.util.Collection;
 
 public interface CategoryService {
     Collection<CategoryResponse> getAllCategories();
+    Collection<CategoryResponse> getTreeCategories();
     Collection<CategoryDetailResponse> getAllDetailCategories();
     CategoryResponse getCategoryById(Long id);
     CategoryResponse createCategory(CategoryRequest categoryRequest);

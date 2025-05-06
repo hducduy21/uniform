@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,21 @@ public class CategoryServiceImpl implements CategoryService {
                 .stream()
                 .map(categoryMapper::categoryToCategoryResponse)
                 .toList();
+    }
+
+    @Override
+    public Collection<CategoryResponse> getTreeCategories() {
+        Collection<CategoryResponse> categories = categoryRepository
+                .findAllByIsRoot(true).stream().map(categoryMapper::categoryToCategoryResponse)
+                .toList();
+
+        return categories.stream().map(res->{
+            Set<CategoryResponse> children = categoryRepository.findAllByParent_Id(res.getId()).stream()
+                    .map(categoryMapper::categoryToCategoryResponse)
+                    .collect(Collectors.toSet());
+            res.setChildren(children);
+            return res;
+        }).toList();
     }
 
     @Override
@@ -75,10 +92,10 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.updateCategoryFromRequest(category, categoryRequest);
 
         //Set parent category
-        if(categoryRequest.getParent().equals(category.getId())) {
-            throw new BadRequestException("Category cannot be its own parent");
-        }
-        if(!categoryRequest.getParent().equals(category.getParent().getId())){
+        if(categoryRequest.getParent() != null){
+            if(categoryRequest.getParent().equals(id)) {
+                throw new BadRequestException("Category cannot be its own parent");
+            }
             Category parent = getCategory(categoryRequest.getParent());
             category.setParent(parent);
         }

@@ -32,11 +32,11 @@ public class Category {
     @Enumerated(EnumType.STRING)
     private ECategotyStatus status = ECategotyStatus.UPCOMING;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", nullable = true)
     private Category parent;
 
-    @ManyToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Product> products;
 
     @Column(nullable = false)

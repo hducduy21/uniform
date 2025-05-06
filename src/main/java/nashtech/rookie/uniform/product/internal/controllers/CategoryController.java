@@ -24,6 +24,12 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+    @GetMapping("tree")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<CategoryResponse> getTreeCategories() {
+        return categoryService.getTreeCategories();
+    }
+
     @GetMapping("/detail")
     @ResponseStatus(HttpStatus.OK)
     public Collection<CategoryDetailResponse> getAllDetailCategories() {

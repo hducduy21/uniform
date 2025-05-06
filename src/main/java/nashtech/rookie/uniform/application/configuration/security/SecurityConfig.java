@@ -28,7 +28,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private static final String[] PERMIT_ONLY_GET_ENDPOINTS = {"/api/categories/**", "/api/products/**", "/api/size/**" };
-    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/login", "/api/auth/refresh", "/api/user/register", "/swagger-ui.html", "/swagger-ui/**", "/api-docsc" };
+    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/login", "/api/auth/refresh", "/api/users/register", "/swagger-ui.html", "/swagger-ui/**", "/api-docs" };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

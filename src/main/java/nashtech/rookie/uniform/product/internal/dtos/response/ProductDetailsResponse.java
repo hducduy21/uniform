@@ -31,5 +31,5 @@ public class ProductDetailsResponse {
 
     private Set<ProductVariantsResponse> productVariants;
 
-    private Set<CategoryResponse> categories;
+    private CategoryResponse category;
 }

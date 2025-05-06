@@ -25,7 +25,7 @@ public class ProductRequest {
     private String description;
     private EProductStatus status;
 
-    private Set<Long> categoryIds;
+    private Long categoryId;
 
     @NotNull
     @PositiveOrZero

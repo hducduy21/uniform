@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
 import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
+import nashtech.rookie.uniform.product.internal.dtos.request.ProductVariantsRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.product.internal.services.ProductService;
@@ -67,5 +68,11 @@ public class ProductManagementController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable UUID productId) {
         productService.deleteProduct(productId);
+    }
+
+    @PutMapping("/{productId}/variants/price")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateProductVariant(@PathVariable UUID productId, @RequestBody @Valid ProductVariantsRequest productVariantsRequest) {
+        productService.updateProductVariant(productId, productVariantsRequest);
     }
 }
