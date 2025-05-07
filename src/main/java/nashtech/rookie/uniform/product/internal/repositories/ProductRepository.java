@@ -18,4 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
 
     @EntityGraph(attributePaths = {"productVariants"})
     Optional<Product> findById(UUID productId);
+
+    Collection<Product> findAllByIdIn(Collection<UUID> productIds);
 }

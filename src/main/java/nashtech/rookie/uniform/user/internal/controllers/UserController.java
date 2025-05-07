@@ -2,6 +2,7 @@ package nashtech.rookie.uniform.user.internal.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.user.internal.dtos.request.ChangePasswordRequest;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserFilter;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserUpdateRequest;
@@ -38,12 +39,6 @@ public class UserController {
         return userService.getUserProfile();
     }
 
-    @PutMapping("/profile")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUserProfile(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
-        userService.updateUser(userUpdateRequest);
-    }
-
     @PostMapping(path = "/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
@@ -54,5 +49,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUserLockStatus(@PathVariable UUID id, @RequestParam boolean lock) {
         userService.updateLockedUser(id, lock);
+    }
+
+    @PutMapping("/profile")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUserProfile(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
+        userService.updateUser(userUpdateRequest);
+    }
+
+    @PatchMapping("/password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
+        userService.changePassword(changePasswordRequest);
     }
 }

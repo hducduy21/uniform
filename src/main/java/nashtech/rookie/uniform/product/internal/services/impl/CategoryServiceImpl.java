@@ -30,6 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     @Override
     public Collection<CategoryResponse> getAllCategories() {
+
         return categoryRepository.findAll()
                 .stream()
                 .map(categoryMapper::categoryToCategoryResponse)

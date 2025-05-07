@@ -26,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final UserInfoProvider userInfoProvider;
 
+    @Override
     public AuthResponse authenticate(AuthRequest authRequest){
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
@@ -37,6 +38,8 @@ public class AuthServiceImpl implements AuthService {
 
         return authMapper.toAuthResponse(userDetails.getUser(), tokenPair);
     }
+
+
 
     @Override
     public UserResponse getProfile() {

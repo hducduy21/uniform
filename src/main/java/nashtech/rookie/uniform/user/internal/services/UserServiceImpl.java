@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
+import nashtech.rookie.uniform.user.internal.dtos.request.ChangePasswordRequest;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserFilter;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserUpdateRequest;
@@ -66,32 +67,45 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailResponse getUserProfile() {
         UUID userId = SecurityUtil.getCurrentUserId();
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User not found")
-        );
+        User user = getUserById(userId);
         return userMapper.userToUserDetailResponse(user);
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest changePasswordRequest) {
+        UUID userId = SecurityUtil.getCurrentUserId();
+
+        User user = getUserById(userId);
+        if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), user.getPassword())) {
+            throw new BadRequestException("Old password is incorrect");
+        }
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getPassword()));
+        userRepository.save(user);
     }
 
     @Transactional
     @Override
     public void updateUser(UserUpdateRequest userUpdateRequest) {
         UUID userId = SecurityUtil.getCurrentUserId();
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User not found")
-        );
+        User user = getUserById(userId);
 
         userMapper.userUpdateRequestToUser(user, userUpdateRequest);
+        userRepository.save(user);
     }
 
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void updateLockedUser(UUID id, boolean locked) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User not found")
-        );
-
+        User user = getUserById(id);
         user.setLocked(locked);
         userRepository.save(user);
+    }
+
+
+    private User getUserById(UUID id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User not found")
+        );
     }
 }

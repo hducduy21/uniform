@@ -12,10 +12,8 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @EntityGraph(attributePaths = {"parent"})
     List<Category> findAll();
 
-    @EntityGraph(attributePaths = {"parent"})
     List<Category> findAllByIdIn(Collection<Long> ids);
 
     List<Category> findAllByIsRoot(boolean root);

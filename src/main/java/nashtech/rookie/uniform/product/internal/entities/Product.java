@@ -62,6 +62,9 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private RatingCounter ratingCounter;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

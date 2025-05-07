@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.user.internal.services;
 
+import nashtech.rookie.uniform.user.internal.dtos.request.ChangePasswordRequest;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserFilter;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserRegisterRequest;
 import nashtech.rookie.uniform.user.internal.dtos.request.UserUpdateRequest;
@@ -12,6 +13,8 @@ import java.util.UUID;
 public interface UserService {
     Page<UserDetailResponse> getAllUser(Pageable pageable, UserFilter userFilter);
     UserDetailResponse getUserProfile();
+
+    void changePassword(ChangePasswordRequest changePasswordRequest);
 
     void updateUser(UserUpdateRequest userUpdateRequest);
 

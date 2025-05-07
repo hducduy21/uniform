@@ -86,7 +86,6 @@ public class JwtUtil {
             }
             return claims;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             throw new InternalServerErrorException(ErrorCode.JWT_EXTRACT_CLAIM.getCode());
         }
     }

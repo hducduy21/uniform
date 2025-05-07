@@ -5,10 +5,7 @@ import nashtech.rookie.uniform.application.services.StorageService;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.inventory.api.InventoryProvider;
 import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
-import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
-import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
-import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
-import nashtech.rookie.uniform.product.internal.dtos.request.ProductVariantsRequest;
+import nashtech.rookie.uniform.product.internal.dtos.request.*;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.product.internal.entities.Category;
@@ -18,6 +15,7 @@ import nashtech.rookie.uniform.product.internal.entities.SizeGroup;
 import nashtech.rookie.uniform.product.internal.entities.enums.EProductStatus;
 import nashtech.rookie.uniform.product.internal.mappers.ProductMapper;
 import nashtech.rookie.uniform.product.internal.mappers.ProductVariantsMapper;
+import nashtech.rookie.uniform.product.internal.mappers.RatingCounterMapper;
 import nashtech.rookie.uniform.product.internal.repositories.CategoryRepository;
 import nashtech.rookie.uniform.product.internal.repositories.ProductRepository;
 import nashtech.rookie.uniform.product.internal.repositories.ProductVariantsRepository;
@@ -56,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
     private final AdminProductSpecificationBuilder adminProductSpecificationBuilder;
     private final UserProductSpecificationBuilder userProductSpecificationBuilder;
     private final InventoryProvider inventoryProvider;
+    private final RatingCounterMapper ratingCounterMapper;
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -207,6 +206,19 @@ public class ProductServiceImpl implements ProductService {
                                 .get(variant.getId())));
 
         productVariantsRepository.saveAll(productVariants);
+    }
+
+    @Transactional
+    @Override
+    public void updateProductStatuses(BulkProductStatusUpdateRequest bulkProductStatusUpdateRequest) {
+        Collection<Product> products = productRepository.findAllByIdIn(bulkProductStatusUpdateRequest.getProductIds());
+        if (products.isEmpty()) {
+            throw new ResourceNotFoundException("Products not found");
+        }
+
+        products.forEach(product ->
+                product.setStatus(EProductStatus.valueOf(bulkProductStatusUpdateRequest.getStatus())));
+        productRepository.saveAll(products);
     }
 
     private Product getProduct(UUID productId) {

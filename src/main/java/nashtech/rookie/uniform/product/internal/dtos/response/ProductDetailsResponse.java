@@ -3,6 +3,7 @@ package nashtech.rookie.uniform.product.internal.dtos.response;
 import lombok.Builder;
 import lombok.Data;
 import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
+import nashtech.rookie.uniform.product.dto.RatingCounterResponse;
 import nashtech.rookie.uniform.product.internal.entities.enums.EProductStatus;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,6 @@ public class ProductDetailsResponse {
     private String description;
     private String imageUrl;
     private EProductStatus status;
-    private float rating;
     private Long views;
     private Double price;
     private LocalDateTime createdAt;
@@ -28,7 +28,7 @@ public class ProductDetailsResponse {
     private String lastUpdatedBy;
 
     private SizeResponse sizeType;
-
+    private RatingCounterResponse ratingCounter;
     private Set<ProductVariantsResponse> productVariants;
 
     private CategoryResponse category;

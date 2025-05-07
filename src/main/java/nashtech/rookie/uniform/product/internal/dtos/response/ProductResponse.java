@@ -3,6 +3,7 @@ package nashtech.rookie.uniform.product.internal.dtos.response;
 import lombok.Builder;
 import lombok.Data;
 import nashtech.rookie.uniform.product.dto.ProductVariantsResponse;
+import nashtech.rookie.uniform.product.dto.RatingCounterResponse;
 import nashtech.rookie.uniform.product.internal.entities.enums.EProductStatus;
 
 import java.util.Set;
@@ -21,6 +22,8 @@ public class ProductResponse {
     private Double price;
     private float rating;
     private Long views;
+
+    private RatingCounterResponse ratingCounter;
     private SizeResponse sizeType;
     private Set<ProductVariantsResponse> productVariants;
 }

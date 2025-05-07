@@ -2,10 +2,7 @@ package nashtech.rookie.uniform.product.internal.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import nashtech.rookie.uniform.product.internal.dtos.request.ListVariantsImageUploadationRequest;
-import nashtech.rookie.uniform.product.internal.dtos.request.ProductFilter;
-import nashtech.rookie.uniform.product.internal.dtos.request.ProductRequest;
-import nashtech.rookie.uniform.product.internal.dtos.request.ProductVariantsRequest;
+import nashtech.rookie.uniform.product.internal.dtos.request.*;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.product.internal.services.ProductService;
@@ -74,5 +71,11 @@ public class ProductManagementController {
     @ResponseStatus(HttpStatus.OK)
     public void updateProductVariant(@PathVariable UUID productId, @RequestBody @Valid ProductVariantsRequest productVariantsRequest) {
         productService.updateProductVariant(productId, productVariantsRequest);
+    }
+
+    @PatchMapping("/status")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateProductStatuses(@RequestBody @Valid BulkProductStatusUpdateRequest bulkProductStatusUpdateRequest) {
+        productService.updateProductStatuses(bulkProductStatusUpdateRequest);
     }
 }

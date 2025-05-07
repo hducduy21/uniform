@@ -15,6 +15,7 @@ public class ProductGeneralResponse {
     private String name;
     private Long views;
     private Set<ProductVariantsResponse> productVariants;
+    private RatingCounterResponse ratingCounter;
 
     private String imageUrl;
     private CategoryResponse categories;

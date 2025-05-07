@@ -7,7 +7,7 @@ import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
 import nashtech.rookie.uniform.product.internal.entities.Product;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {RatingCounterMapper.class})
 public interface ProductMapper {
     Product productRequestToProduct(ProductRequest productRequest);
     ProductRequest productToProductRequest(Product product);
