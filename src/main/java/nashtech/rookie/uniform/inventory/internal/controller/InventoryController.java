@@ -3,7 +3,7 @@ package nashtech.rookie.uniform.inventory.internal.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryRequest;
-import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdationRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdateRequest;
 import nashtech.rookie.uniform.inventory.internal.dtos.response.InventoryResponse;
 import nashtech.rookie.uniform.inventory.internal.services.InventoryService;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class InventoryController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<InventoryResponse> getAllInventory() {
+    public Collection<InventoryResponse> getAllInventories() {
         return inventoryService.getAllInventories();
     }
 
@@ -37,7 +37,7 @@ public class InventoryController {
 
     @PutMapping("/{inventoryId}")
     @ResponseStatus(HttpStatus.OK)
-    public InventoryResponse updateInventory(@PathVariable Long inventoryId, @RequestBody @Valid InventoryUpdationRequest inventoryRequest) {
+    public InventoryResponse updateInventory(@PathVariable Long inventoryId, @RequestBody @Valid InventoryUpdateRequest inventoryRequest) {
         return inventoryService.updateInventory(inventoryId, inventoryRequest);
     }
 }

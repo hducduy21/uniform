@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/size")
+@RequestMapping("/api/sizes")
 @RequiredArgsConstructor
 public class SizeGroupController {
     private final SizeGroupService sizeGroupService;

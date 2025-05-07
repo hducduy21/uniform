@@ -32,8 +32,8 @@ public class AuthServiceImpl implements AuthService {
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
 
         TokenPair tokenPair = TokenPair.builder()
-                .accessToken(jwtUtil.generateToken(userDetails.getUser()))
-                .refreshToken(jwtUtil.generateToken(userDetails.getEmail()))
+                .accessToken(jwtUtil.generateAccessToken(userDetails.getUser()))
+                .refreshToken(jwtUtil.generateRefreshToken(userDetails.getEmail()))
                 .build();
 
         return authMapper.toAuthResponse(userDetails.getUser(), tokenPair);
@@ -61,8 +61,8 @@ public class AuthServiceImpl implements AuthService {
 
         UserInfoDto userInfoDto = userInfoProvider.getUserInfo(email);
         return TokenPair.builder()
-                .accessToken(jwtUtil.generateToken(userInfoDto))
-                .refreshToken(jwtUtil.generateToken(email))
+                .accessToken(jwtUtil.generateAccessToken(userInfoDto))
+                .refreshToken(jwtUtil.generateRefreshToken(email))
                 .build();
     }
 }

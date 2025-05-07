@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryUpdationRequest {
+public class InventoryUpdateRequest {
     @NotNull
     private Integer quantityInStock;
 }

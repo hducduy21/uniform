@@ -100,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(category);
         product.setSizeType(sizeType);
         product.setCreatedBy(SecurityUtil.getCurrentUserEmail());
-        product = saveProduct(product);
+        product = productRepository.save(product);
 
         createProductVariants(product, productRequest.getHexColors(), sizeType.getElements());
         return product.getId();
@@ -117,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(LocalDateTime.now());
         product.setLastUpdatedBy(SecurityUtil.getCurrentUserEmail());
 
-        saveProduct(product);
+        productRepository.save(product);
 
         return productMapper.productToProductResponse(product);
     }
@@ -135,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
         String fileName = productId.toString();
         try {
             storageService.uploadFile(fileName, folder, file);
-            saveProduct(product);
+            productRepository.save(product);
         }catch (Exception e){
             throw new InternalServerErrorException("Error uploading profile image! Please try later.");
         }
@@ -165,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public byte[] getProductImageById(UUID productId) {
-        if(!isProductExists(productId)) {
+        if(!productRepository.existsById(productId)) {
             throw new BadRequestException("Product not found");
         }
         try{
@@ -184,7 +184,7 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(LocalDateTime.now());
         product.setLastUpdatedBy(SecurityUtil.getCurrentUserEmail());
 
-        saveProduct(product);
+        productRepository.save(product);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -229,14 +229,6 @@ public class ProductServiceImpl implements ProductService {
     private Category getCategory(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-    }
-
-    private boolean isProductExists(UUID productId) {
-        return productRepository.existsById(productId);
-    }
-
-    private Product saveProduct(Product product) {
-        return productRepository.save(product);
     }
 
     private SizeGroup getSizes(Integer sizeTypeId) {

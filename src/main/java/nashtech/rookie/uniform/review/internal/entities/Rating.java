@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-public class Review {
+public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

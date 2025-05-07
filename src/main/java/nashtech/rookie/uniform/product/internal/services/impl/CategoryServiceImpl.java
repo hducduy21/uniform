@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .findAllByIsRoot(true).stream().map(categoryMapper::categoryToCategoryResponse)
                 .toList();
 
-        return categories.stream().map(res->{
+        return categories.stream().map(res -> {
             Set<CategoryResponse> children = categoryRepository.findAllByParent_Id(res.getId()).stream()
                     .map(categoryMapper::categoryToCategoryResponse)
                     .collect(Collectors.toSet());
@@ -71,17 +72,14 @@ public class CategoryServiceImpl implements CategoryService {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
-        Category parent = null;
-        if(categoryRequest.getParent() != null) {
-            parent = getCategory(categoryRequest.getParent());
-        }
+        Category parent = Optional.ofNullable(categoryRequest.getParent())
+                .map(this::getCategory).orElse(null);
 
         Category category = categoryMapper.categoryRequestToCategory(categoryRequest);
         category.setParent(parent);
         category.setCreatedBy(SecurityUtil.getCurrentUserEmail());
 
-        category = saveCategory(category);
-
+        categoryRepository.save(category);
         return categoryMapper.categoryToCategoryResponse(category);
     }
 
@@ -93,10 +91,8 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.updateCategoryFromRequest(category, categoryRequest);
 
         //Set parent category
-        if(categoryRequest.getParent() != null){
-            if(categoryRequest.getParent().equals(id)) {
-                throw new BadRequestException("Category cannot be its own parent");
-            }
+        if (categoryRequest.getParent() != null) {
+            validateParentCategory(categoryRequest.getParent(), id);
             Category parent = getCategory(categoryRequest.getParent());
             category.setParent(parent);
         }
@@ -104,7 +100,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdatedBy(SecurityUtil.getCurrentUserEmail());
         category.setUpdatedAt(LocalDateTime.now());
 
-        saveCategory(category);
+        categoryRepository.save(category);
         return categoryMapper.categoryToCategoryDetailResponse(category);
     }
 
@@ -117,7 +113,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdatedBy(SecurityUtil.getCurrentUserEmail());
         category.setUpdatedAt(LocalDateTime.now());
 
-        saveCategory(category);
+        categoryRepository.save(category);
     }
 
     private Category getCategory(Long id) {
@@ -125,7 +121,13 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
-    private Category saveCategory(Category category) {
-        return categoryRepository.save(category);
+    private void validateParentCategory(Long parentId, Long categoryId) {
+        if (parentId.equals(categoryId)) {
+            throw new BadRequestException("Category cannot be its own parent");
+        }
+        Category parent = getCategory(parentId);
+        if (!parent.isRoot()) {
+            throw new BadRequestException("Parent category must be root category");
+        }
     }
 }

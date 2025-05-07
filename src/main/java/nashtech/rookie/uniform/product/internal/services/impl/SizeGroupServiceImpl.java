@@ -40,7 +40,7 @@ public class SizeGroupServiceImpl implements SizeGroupService {
     @Override
     public SizeResponse createSize(SizeRequest sizeRequest) {
         SizeGroup size = sizeMapper.sizeRequestToSize(sizeRequest);
-        size = saveSize(size);
+        size = sizeGroupRepository.save(size);
         return sizeMapper.sizeToSizeResponse(size);
     }
 
@@ -50,7 +50,7 @@ public class SizeGroupServiceImpl implements SizeGroupService {
     public SizeResponse updateSize(Integer id, SizeRequest sizeRequest) {
         SizeGroup size = findSizes(id);
         sizeMapper.updateSizeFromRequest(size, sizeRequest);
-        saveSize(size);
+        sizeGroupRepository.save(size);
         return sizeMapper.sizeToSizeResponse(size);
     }
 
@@ -59,7 +59,4 @@ public class SizeGroupServiceImpl implements SizeGroupService {
                 .orElseThrow(() -> new ResourceNotFoundException("Size not found"));
     }
 
-    private SizeGroup saveSize(SizeGroup size) {
-        return sizeGroupRepository.save(size);
-    }
 }

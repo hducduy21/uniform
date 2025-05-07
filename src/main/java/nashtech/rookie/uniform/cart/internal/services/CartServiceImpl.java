@@ -52,7 +52,7 @@ public class CartServiceImpl implements CartService {
                 .productVariantsId(productVariantsId)
                 .quantity(cartRequest.getQuantity())
                 .build();
-        saveCart(cart);
+        cartRepository.save(cart);
     }
 
     @Transactional
@@ -81,7 +81,7 @@ public class CartServiceImpl implements CartService {
         }
 
         cart.setQuantity(quantity);
-        saveCart(cart);
+        cartRepository.save(cart);
     }
 
     @Transactional
@@ -99,10 +99,6 @@ public class CartServiceImpl implements CartService {
         Map<Long, ProductVariantsResponse> variantsMap = convertVariantsToMap(variants);
 
         return cartMapper.toCartResponsePage(carts, variantsMap);
-    }
-
-    private void saveCart(Cart cart) {
-        cartRepository.save(cart);
     }
 
     private UUID getCurrentUserId() {

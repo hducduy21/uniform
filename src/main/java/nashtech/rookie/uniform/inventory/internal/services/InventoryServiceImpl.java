@@ -2,7 +2,7 @@ package nashtech.rookie.uniform.inventory.internal.services;
 
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryRequest;
-import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdationRequest;
+import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdateRequest;
 import nashtech.rookie.uniform.inventory.internal.dtos.response.InventoryResponse;
 import nashtech.rookie.uniform.inventory.internal.entities.Inventory;
 import nashtech.rookie.uniform.inventory.internal.mappers.InventoryMapper;
@@ -27,25 +27,21 @@ public class InventoryServiceImpl implements InventoryService {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse createInventory(InventoryRequest inventoryRequest) {
-
         if(!productServiceProvider.productVariantsExists(inventoryRequest.getProductVariantsId())) {
             throw new ResourceNotFoundException("Product not found");
         }
-
         Inventory inventory = inventoryMapper.inventoryRequestToInventory(inventoryRequest);
-        inventory.setProductVariantsId(inventoryRequest.getProductVariantsId());
-        inventory = saveInventory(inventory);
-
+        inventory = inventoryRepository.save(inventory);
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
 
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public InventoryResponse updateInventory(Long id, InventoryUpdationRequest inventoryUpdationRequest) {
+    public InventoryResponse updateInventory(Long id, InventoryUpdateRequest inventoryUpdateRequest) {
         Inventory inventory = findInventoryById(id);
-        inventory.setQuantityInStock(inventoryUpdationRequest.getQuantityInStock());
-        inventory = saveInventory(inventory);
+        inventory.setQuantityInStock(inventoryUpdateRequest.getQuantityInStock());
+        inventory = inventoryRepository.save(inventory);
 
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
@@ -67,11 +63,6 @@ public class InventoryServiceImpl implements InventoryService {
         Inventory inventory = findInventoryById(id);
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
-
-    private Inventory saveInventory(Inventory inventory) {
-        return inventoryRepository.save(inventory);
-    }
-
     private Inventory findInventoryById(Long id) {
         return inventoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));

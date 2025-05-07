@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.shared.constants.LogField;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
@@ -30,14 +31,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         try {
-            //create requestId and put it to MDC
-            String requestId = UUID.randomUUID().toString();
-            MDC.put("requestID", requestId);
+            MDC.put(LogField.REQUEST_ID, UUID.randomUUID().toString());
 
             //get token from header
             String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !StringUtils.startsWith(authHeader,"Bearer ")) {
-                MDC.put("userId", "unverified");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -47,7 +45,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             String email = jwtUtil.extractClaim(token, "email");
             if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 String userId = jwtUtil.extractClaim(token, "userId");
-                MDC.put("userId", userId);
+                MDC.put(LogField.USER_ID, userId);
 
                 CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -58,6 +56,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         }
         catch (Exception e) {
             filterChain.doFilter(request, response);
+            MDC.clear();
+        } finally {
             MDC.clear();
         }
     }

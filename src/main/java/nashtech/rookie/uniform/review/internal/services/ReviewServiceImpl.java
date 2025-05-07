@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.product.api.ProductServiceProvider;
 import nashtech.rookie.uniform.review.internal.dtos.ReviewRequest;
-import nashtech.rookie.uniform.review.internal.entities.Review;
-import nashtech.rookie.uniform.review.internal.repositories.ReviewRepository;
+import nashtech.rookie.uniform.review.internal.entities.Rating;
+import nashtech.rookie.uniform.review.internal.repositories.RatingRepository;
 import nashtech.rookie.uniform.shared.dtos.RatingCreateEvent;
 import nashtech.rookie.uniform.shared.dtos.RatingUpdatedEvent;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -18,9 +18,17 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
-    private final ReviewRepository reviewRepository;
+    private final RatingRepository ratingRepository;
     private final ProductServiceProvider productServiceProvider;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Override
+    public int getMyRating(UUID productId) {
+        UUID userId = getCurrentUserId();
+        return ratingRepository.findReviewByProductIdAndUserId(productId, userId)
+                .map(Rating::getRating)
+                .orElse(0);
+    }
 
     @Transactional
     @Override
@@ -32,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new IllegalArgumentException("Product not found");
         }
 
-        Optional<Review> review = findReview(productId, userId);
+        Optional<Rating> review = findReview(productId, userId);
         if (review.isPresent()) {
             updateReview(review.get(), reviewRequest.getRating());
         } else {
@@ -40,10 +48,10 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
-    private void updateReview(Review review, Integer rating) {
+    private void updateReview(Rating review, Integer rating) {
         int oldRating = review.getRating();
         review.setRating(rating);
-        saveReview(review);
+        ratingRepository.save(review);
 
         RatingUpdatedEvent ratingUpdatedEvent = RatingUpdatedEvent.builder()
                 .productId(review.getProductId())
@@ -53,8 +61,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void createReview(UUID productId, UUID userId, Integer rating) {
-        Review review = Review.builder().userId(userId).productId(productId).rating(rating).build();
-//        saveReview(review);
+        Rating review = Rating.builder().userId(userId).productId(productId).rating(rating).build();
+        ratingRepository.save(review);
 
         RatingCreateEvent ratingCreateEvent = RatingCreateEvent.builder()
             .productId(productId)
@@ -63,15 +71,11 @@ public class ReviewServiceImpl implements ReviewService {
         kafkaTemplate.send("rating-created", ratingCreateEvent);
     }
 
-    private Optional<Review> findReview(UUID productId, UUID userId) {
-        return reviewRepository.findReviewByProductIdAndUserId(productId, userId);
+    private Optional<Rating> findReview(UUID productId, UUID userId) {
+        return ratingRepository.findReviewByProductIdAndUserId(productId, userId);
     }
 
     private UUID getCurrentUserId() {
         return SecurityUtil.getCurrentUserId();
-    }
-
-    private void saveReview(Review review) {
-        reviewRepository.save(review);
     }
 }
