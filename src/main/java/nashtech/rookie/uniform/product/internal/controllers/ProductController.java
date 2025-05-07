@@ -18,9 +18,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/${application.version}/products")
 @RequiredArgsConstructor
-@Tag(name = "Product", description = "Product API")
+@Tag(name = "Product", description = "Product API for user")
 public class ProductController {
     private final ProductService productService;
 

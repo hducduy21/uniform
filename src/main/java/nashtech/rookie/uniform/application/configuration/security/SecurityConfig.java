@@ -28,7 +28,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private static final String[] PERMIT_ONLY_GET_ENDPOINTS = {"/api/categories/**", "/api/products/**", "/api/size/**" };
-    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/login", "/api/auth/refresh", "/api/users/register", "/swagger-ui.html", "/swagger-ui/**", "/api-docs" };
+    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/login", "/api/auth/refresh", "/api/users/register", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,8 +37,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET,PERMIT_ONLY_GET_ENDPOINTS).permitAll()
                         .requestMatchers(PERMIT_ALL_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET,PERMIT_ONLY_GET_ENDPOINTS).permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

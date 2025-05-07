@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.product.internal.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.product.internal.dtos.request.SizeRequest;
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
+@Tag(name="Size", description = "Size type of product APIs")
 @RestController
-@RequestMapping("/api/sizes")
+@RequestMapping("/api/${application.version}/sizes")
 @RequiredArgsConstructor
 public class SizeGroupController {
     private final SizeGroupService sizeGroupService;

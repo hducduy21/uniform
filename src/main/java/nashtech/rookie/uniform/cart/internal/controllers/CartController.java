@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.cart.internal.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.cart.internal.dtos.CartRequest;
@@ -12,8 +13,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name="Cart", description = "Cart APIs")
 @RestController
-@RequestMapping("/api/carts")
+@RequestMapping("/api/${application.version}/carts")
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;

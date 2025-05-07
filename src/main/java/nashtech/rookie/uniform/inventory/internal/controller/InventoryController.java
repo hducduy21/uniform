@@ -1,5 +1,7 @@
 package nashtech.rookie.uniform.inventory.internal.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryRequest;
@@ -11,8 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
+@Tag(name="Inventory", description = "Inventory APIs")
 @RestController
-@RequestMapping("/api/inventories")
+@RequestMapping("/api/${application.version}/inventories")
 @RequiredArgsConstructor
 public class InventoryController {
     private final InventoryService inventoryService;
@@ -35,6 +38,7 @@ public class InventoryController {
         return inventoryService.createInventory(inventoryRequest);
     }
 
+    @Operation(summary = "Update quantity in stock of inventory")
     @PutMapping("/{inventoryId}")
     @ResponseStatus(HttpStatus.OK)
     public InventoryResponse updateInventory(@PathVariable Long inventoryId, @RequestBody @Valid InventoryUpdateRequest inventoryRequest) {

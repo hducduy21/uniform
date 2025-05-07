@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.wishlist.internal.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.product.dto.ProductGeneralResponse;
@@ -14,8 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Tag(name = "WishList", description = "WishList APIs")
 @RestController
-@RequestMapping("/api/wishlists")
+@RequestMapping("/api/${application.version}/wishlists")
 @RequiredArgsConstructor
 public class WishListController {
     private final WishListService wishListService;

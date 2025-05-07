@@ -1,5 +1,7 @@
 package nashtech.rookie.uniform.review.internal.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.review.internal.dtos.ReviewRequest;
@@ -9,12 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Tag(name="Rating", description = "Rating APIs")
 @RestController
-@RequestMapping("/api/ratings")
+@RequestMapping("/api/${application.version}/ratings")
 @RequiredArgsConstructor
 public class RatingController {
     private final ReviewService reviewService;
 
+    @Operation(summary = "Get my rating for a product")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public int getAllRatings(@RequestParam UUID productId) {

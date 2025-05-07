@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.auth.internal.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.auth.internal.dtos.request.AuthRequest;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/api/${application.version}/auth")
+@Tag(name = "Auth", description = "Authentication APIs")
 public class AuthController {
     private final AuthService authService;
 

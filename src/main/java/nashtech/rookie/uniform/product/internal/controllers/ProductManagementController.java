@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.product.internal.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.product.internal.dtos.request.*;
@@ -16,8 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
+@Tag(name="Product", description = "Product API for admin")
 @RestController
-@RequestMapping("/api/admin/products")
+@RequestMapping("/api/${application.version}/admin/products")
 @RequiredArgsConstructor
 public class ProductManagementController {
     private final ProductService productService;

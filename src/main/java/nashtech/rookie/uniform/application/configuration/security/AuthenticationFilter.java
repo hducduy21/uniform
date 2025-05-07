@@ -56,7 +56,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         }
         catch (Exception e) {
             filterChain.doFilter(request, response);
-            MDC.clear();
         } finally {
             MDC.clear();
         }

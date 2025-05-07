@@ -1,5 +1,6 @@
 package nashtech.rookie.uniform.user.internal.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nashtech.rookie.uniform.user.internal.dtos.request.ChangePasswordRequest;
@@ -17,8 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Tag(name="User", description = "User API")
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/${application.version}/users")
 @RequiredArgsConstructor
 public class UserController {
 
