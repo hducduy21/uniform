@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.application.configuration.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
 import nashtech.rookie.uniform.user.api.UserInfoProvider;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class ApplicationConfig {
     private final UserInfoProvider userInfoProvider;
 
@@ -36,6 +38,7 @@ public class ApplicationConfig {
         try{
             return config.getAuthenticationManager();
         }catch (Exception e) {
+            log.error("Error when creating authentication manager: ", e);
             throw new InternalServerErrorException();
         }
     }

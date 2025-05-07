@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryRequest;
 import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdateRequest;
 import nashtech.rookie.uniform.inventory.internal.dtos.response.InventoryResponse;
@@ -17,6 +18,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/${application.version}/inventories")
 @RequiredArgsConstructor
+@Slf4j
 public class InventoryController {
     private final InventoryService inventoryService;
 
@@ -35,6 +37,7 @@ public class InventoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public InventoryResponse createInventory(@RequestBody @Valid InventoryRequest inventoryRequest) {
+        log.info("Create inventory: {}", inventoryRequest);
         return inventoryService.createInventory(inventoryRequest);
     }
 
@@ -42,6 +45,7 @@ public class InventoryController {
     @PutMapping("/{inventoryId}")
     @ResponseStatus(HttpStatus.OK)
     public InventoryResponse updateInventory(@PathVariable Long inventoryId, @RequestBody @Valid InventoryUpdateRequest inventoryRequest) {
+        log.info("Update inventory with id: {} with request: {}", inventoryId, inventoryRequest);
         return inventoryService.updateInventory(inventoryId, inventoryRequest);
     }
 }

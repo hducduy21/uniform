@@ -3,6 +3,7 @@ package nashtech.rookie.uniform.product.internal.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.product.internal.dtos.request.SizeRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.SizeResponse;
 import nashtech.rookie.uniform.product.internal.services.SizeGroupService;
@@ -15,6 +16,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/${application.version}/sizes")
 @RequiredArgsConstructor
+@Slf4j
 public class SizeGroupController {
     private final SizeGroupService sizeGroupService;
 
@@ -33,12 +35,14 @@ public class SizeGroupController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SizeResponse createSizeGroup(@RequestBody @Valid SizeRequest sizeRequest) {
+        log.info("Creating new size group: {}", sizeRequest);
         return sizeGroupService.createSize(sizeRequest);
     }
 
     @PutMapping("/{sizeId}")
     @ResponseStatus(HttpStatus.OK)
     public SizeResponse updateSizeGroup(@PathVariable Integer sizeId, @RequestBody @Valid SizeRequest sizeRequest) {
+        log.info("Updating size group with id: {}", sizeId);
         return sizeGroupService.updateSize(sizeId, sizeRequest);
     }
 }

@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.product.internal.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.product.internal.dtos.request.SizeRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.SizeResponse;
 import nashtech.rookie.uniform.product.internal.entities.SizeGroup;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SizeGroupServiceImpl implements SizeGroupService {
     private final SizeGroupRepository sizeGroupRepository;
     private final SizeMapper sizeMapper;
@@ -39,6 +41,8 @@ public class SizeGroupServiceImpl implements SizeGroupService {
     public SizeResponse createSize(SizeRequest sizeRequest) {
         SizeGroup size = sizeMapper.sizeRequestToSize(sizeRequest);
         size = sizeGroupRepository.save(size);
+
+        log.info("Created new size: {}", size);
         return sizeMapper.sizeToSizeResponse(size);
     }
 
@@ -48,6 +52,8 @@ public class SizeGroupServiceImpl implements SizeGroupService {
         SizeGroup size = findSizes(id);
         sizeMapper.updateSizeFromRequest(size, sizeRequest);
         sizeGroupRepository.save(size);
+
+        log.info("Updated size: {}", size);
         return sizeMapper.sizeToSizeResponse(size);
     }
 

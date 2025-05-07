@@ -3,6 +3,7 @@ package nashtech.rookie.uniform.product.internal.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.product.internal.dtos.request.*;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductDetailsResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.ProductResponse;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/${application.version}/admin/products")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductManagementController {
     private final ProductService productService;
 
@@ -42,42 +44,49 @@ public class ProductManagementController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UUID createProduct(@RequestBody @Valid ProductRequest productRequest) {
+        log.info("Create product: {}", productRequest);
         return productService.createProduct(productRequest);
     }
 
     @PatchMapping("/{productId}/image")
     @ResponseStatus(HttpStatus.CREATED)
     public void uploadProductImage(@PathVariable UUID productId, @RequestPart MultipartFile file) {
+        log.info("Uploading image for product with id: {}", productId);
         productService.uploadProductImage(productId, file);
     }
 
     @PatchMapping("/{productId}/variants/image")
     @ResponseStatus(HttpStatus.CREATED)
     public void uploadProductVariantsImage(@PathVariable UUID productId, @ModelAttribute ListVariantsImageUploadationRequest files) {
+        log.info("Uploading variants image for product with id: {}", productId);
         productService.uploadProductVariantsImage(productId, files);
     }
 
     @PutMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public ProductResponse updateProduct(@PathVariable UUID productId, @RequestBody @Valid ProductRequest productRequest) {
+        log.info("Update product with id: {} with request: {}", productId, productRequest);
         return productService.updateProduct(productId, productRequest);
     }
 
     @DeleteMapping("/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable UUID productId) {
+        log.info("Deleting product with id: {}", productId);
         productService.deleteProduct(productId);
     }
 
     @PutMapping("/{productId}/variants/price")
     @ResponseStatus(HttpStatus.OK)
     public void updateProductVariant(@PathVariable UUID productId, @RequestBody @Valid ProductVariantsRequest productVariantsRequest) {
+        log.info("Update product variant with id: {} with request: {}", productId, productVariantsRequest);
         productService.updateProductVariant(productId, productVariantsRequest);
     }
 
     @PatchMapping("/status")
     @ResponseStatus(HttpStatus.OK)
     public void updateProductStatuses(@RequestBody @Valid BulkProductStatusUpdateRequest bulkProductStatusUpdateRequest) {
+        log.info("Update product status with request: {}", bulkProductStatusUpdateRequest);
         productService.updateProductStatuses(bulkProductStatusUpdateRequest);
     }
 }

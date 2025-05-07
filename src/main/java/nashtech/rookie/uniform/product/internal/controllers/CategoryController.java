@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.product.internal.dtos.request.CategoryRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryDetailResponse;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryResponse;
@@ -18,6 +19,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/${application.version}/categories")
 @RequiredArgsConstructor
+@Slf4j
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -59,18 +61,21 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponse createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
+        log.info("Create category: {}", categoryRequest);
         return categoryService.createCategory(categoryRequest);
     }
 
     @PutMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDetailResponse updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CategoryRequest categoryRequest) {
+        log.info("Update category with id: {} with request: {}", categoryId, categoryRequest);
         return categoryService.updateCategory(categoryId, categoryRequest);
     }
 
     @PatchMapping("/{categoryId}/status")
     @ResponseStatus(HttpStatus.OK)
     public void updateCategoryStatus(@PathVariable Long categoryId, @RequestParam ECategotyStatus status) {
+        log.info("Update category with id: {} with status: {}", categoryId, status);
         categoryService.updateCategoryStatus(categoryId, status);
     }
 }

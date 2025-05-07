@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.product.internal.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.application.services.StorageService;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.inventory.api.InventoryProvider;
@@ -42,6 +43,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final SizeGroupRepository sizeGroupRepository;
@@ -99,6 +101,7 @@ public class ProductServiceImpl implements ProductService {
         product = productRepository.save(product);
 
         createProductVariants(product, productRequest.getHexColors(), sizeType.getElements());
+        log.info("Created product with id: {}", product.getId());
         return product.getId();
     }
 
@@ -114,6 +117,7 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(product);
 
+        log.info("Updated product with id: {}", productId);
         return productMapper.productToProductResponse(product);
     }
 
@@ -130,7 +134,9 @@ public class ProductServiceImpl implements ProductService {
         try {
             storageService.uploadFile(fileName, folder, file);
             productRepository.save(product);
+            log.info("Uploaded product image with id: {}", productId);
         }catch (Exception e){
+            log.error("Error uploading product image: {}", e.getMessage());
             throw new InternalServerErrorException("Error uploading profile image! Please try later.");
         }
     }
@@ -153,6 +159,7 @@ public class ProductServiceImpl implements ProductService {
         String folder = productId.toString();
         Map<String, MultipartFile> files = productVariantsMapper.toImageMap(listVariantsImageUploadationRequest.getImages());
         storageService.uploadFiles(files, folder);
+        log.info("Uploaded product variants image with id: {}", productId);
     }
 
     @Transactional(readOnly = true)
@@ -164,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
         try{
             return storageService.getByte(productId.toString(), productId.toString());
         }catch (Exception e){
+            log.error("Error getting product image: {}", e.getMessage());
             throw new InternalServerErrorException("Error getting product image! Please try later.");
         }
     }
@@ -176,6 +184,7 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(LocalDateTime.now());
         product.setLastUpdatedBy(SecurityUtil.getCurrentUserEmail());
 
+        log.info("Updated status deleted product with id: {}", productId);
         productRepository.save(product);
     }
 
@@ -185,6 +194,7 @@ public class ProductServiceImpl implements ProductService {
         Collection<ProductVariants> productVariants = productVariantsRepository.findAllByProduct_Id(productId);
 
         if (productVariants.isEmpty()) {
+            log.warn("Product has no variants: " + productId);
             throw new ResourceNotFoundException("Product variants not found");
         }
 
@@ -197,6 +207,7 @@ public class ProductServiceImpl implements ProductService {
                                 .get(variant.getId())));
 
         productVariantsRepository.saveAll(productVariants);
+        log.info("Updated product variant with id: {}", productId);
     }
 
     @Transactional
@@ -210,6 +221,7 @@ public class ProductServiceImpl implements ProductService {
         products.forEach(product ->
                 product.setStatus(EProductStatus.valueOf(bulkProductStatusUpdateRequest.getStatus())));
         productRepository.saveAll(products);
+        log.info("Updated product status with ids: {}", bulkProductStatusUpdateRequest.getProductIds());
     }
 
     private Product getProduct(UUID productId) {

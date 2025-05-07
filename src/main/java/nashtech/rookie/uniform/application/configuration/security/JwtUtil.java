@@ -5,10 +5,10 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.shared.enums.ErrorCode;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
-import nashtech.rookie.uniform.user.api.UserInfoProvider;
 import nashtech.rookie.uniform.user.dto.UserInfoDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,6 +21,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtUtil {
 
     @Value("${jwt.secretKey}")
@@ -35,8 +36,6 @@ public class JwtUtil {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private final UserInfoProvider userInfoProvider;
-
     public String generateTokenFromClaimsSet(JWTClaimsSet claimsSet) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS256);
         Payload payload = new Payload(claimsSet.toJSONObject());
@@ -46,6 +45,7 @@ public class JwtUtil {
             jwsObject.sign(new MACSigner(jwtSecretKey.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
+            log.error("Signing JWT error: ", e);
             throw new InternalServerErrorException(ErrorCode.JWT_GENEREATE_ERROR.getCode());
         }
     }
@@ -83,6 +83,7 @@ public class JwtUtil {
         try{
             return claims.getStringClaim(claimKey);
         } catch (Exception e) {
+            log.warn("Error when extracting claim {} from token: {}", claimKey, token, e);
             throw new InternalServerErrorException(ErrorCode.JWT_EXTRACT_CLAIM.getCode());
         }
     }
@@ -95,6 +96,7 @@ public class JwtUtil {
             validateExpiration(claims);
             return claims;
         } catch (Exception e) {
+            log.warn("Error when extracting claims from token: {}", token, e);
             throw new InternalServerErrorException(ErrorCode.JWT_EXTRACT_CLAIM.getCode());
         }
     }
@@ -106,6 +108,7 @@ public class JwtUtil {
     private void verifyTokenSignature(JWSObject jwsObject) throws JOSEException {
         JWSVerifier verifier = new MACVerifier(jwtSecretKey.getBytes());
         if (!jwsObject.verify(verifier)) {
+            log.info("Invalid JWT signature");
             throw new BadRequestException("Your authentication session is invalid. Please log in again to continue!");
         }
     }
@@ -118,6 +121,7 @@ public class JwtUtil {
     private void validateExpiration(JWTClaimsSet claims) {
         Date expiration = claims.getExpirationTime();
         if (expiration != null && expiration.before(new Date())) {
+            log.info("JWT token has expired");
             throw new BadRequestException("Your session has expired. Please log in again to continue!");
         }
     }

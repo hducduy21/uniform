@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.inventory.internal.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryRequest;
 import nashtech.rookie.uniform.inventory.internal.dtos.requests.InventoryUpdateRequest;
 import nashtech.rookie.uniform.inventory.internal.dtos.response.InventoryResponse;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
@@ -30,6 +32,8 @@ public class InventoryServiceImpl implements InventoryService {
         }
         Inventory inventory = inventoryMapper.inventoryRequestToInventory(inventoryRequest);
         inventory = inventoryRepository.save(inventory);
+
+        log.info("Created inventory with id: {}", inventory.getId());
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
 
@@ -40,6 +44,7 @@ public class InventoryServiceImpl implements InventoryService {
         inventory.setQuantityInStock(inventoryUpdateRequest.getQuantityInStock());
         inventory = inventoryRepository.save(inventory);
 
+        log.info("Updated product with id: {}", id);
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
 

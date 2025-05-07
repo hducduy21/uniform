@@ -39,6 +39,7 @@ class RequirePhoneNumberOrEmailValidator implements ConstraintValidator<RequireP
                 return true;
             }
         }catch (Exception e){
+
             return false;
         }
         return false;

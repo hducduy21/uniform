@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.product.internal.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.product.internal.dtos.request.CategoryRequest;
 import nashtech.rookie.uniform.product.internal.dtos.response.CategoryDetailResponse;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
@@ -79,6 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCreatedBy(SecurityUtil.getCurrentUserEmail());
 
         categoryRepository.save(category);
+        log.info("Create category with id: {}", category.getId());
         return categoryMapper.categoryToCategoryResponse(category);
     }
 
@@ -92,6 +95,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryRequest.getParent() != null) {
             validateParentCategory(categoryRequest.getParent(), id);
             Category parent = getCategory(categoryRequest.getParent());
+
+            log.info("Update category with parent: {}", parent.getId());
             category.setParent(parent);
         }
 
@@ -99,6 +104,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdatedAt(LocalDateTime.now());
 
         categoryRepository.save(category);
+        log.info("Update category with id: {}", id);
         return categoryMapper.categoryToCategoryDetailResponse(category);
     }
 
@@ -110,6 +116,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdatedBy(SecurityUtil.getCurrentUserEmail());
         category.setUpdatedAt(LocalDateTime.now());
 
+        log.info("Update category with id: {} to status: {}", id, status);
         categoryRepository.save(category);
     }
 

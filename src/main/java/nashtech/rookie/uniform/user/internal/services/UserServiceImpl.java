@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.user.internal.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
@@ -25,6 +26,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -96,6 +98,8 @@ public class UserServiceImpl implements UserService {
     public void updateLockedUser(UUID id, boolean locked) {
         User user = getUserById(id);
         user.setLocked(locked);
+
+        log.info("Locked user with id: {}", id);
         userRepository.save(user);
     }
 

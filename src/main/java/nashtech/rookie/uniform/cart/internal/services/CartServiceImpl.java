@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.cart.internal.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.application.utils.SecurityUtil;
 import nashtech.rookie.uniform.cart.internal.dtos.CartRequest;
 import nashtech.rookie.uniform.cart.internal.dtos.CartResponse;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CartMapper cartMapper;
@@ -40,6 +42,7 @@ public class CartServiceImpl implements CartService {
         Long productVariantsId = cartRequest.getProductVariantsId();
 
         if(!productServiceProvider.productVariantsExists(productVariantsId)) {
+            log.info("Product variants does not exist: " + productVariantsId);
             throw new ResourceNotFoundException("Product variants not found");
         }
 
@@ -72,6 +75,7 @@ public class CartServiceImpl implements CartService {
         UUID userId = getCurrentUserId();
 
         if(!StringUtils.equals(cart.getUserId().toString(), userId.toString())) {
+            log.warn("User does not have permission to update the cart");
             throw new ForbiddenException("You do not have permission to update this cart");
         }
 

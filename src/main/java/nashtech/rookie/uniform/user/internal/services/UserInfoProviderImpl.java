@@ -23,43 +23,8 @@ public class UserInfoProviderImpl implements UserInfoProvider {
     }
 
     @Override
-    public String getEmail(String phoneNumber) {
-        return getUser(phoneNumber).getEmail();
-    }
-
-    @Override
-    public String getPassword(String phoneNumber) {
-        return getUser(phoneNumber).getPassword();
-    }
-
-    @Override
-    public String getRole(String phoneNumber) {
-        return getUser(phoneNumber).getRole().toString();
-    }
-
-    @Override
     public UUID getId(String phoneNumber) {
         return getUser(phoneNumber).getId();
-    }
-
-    @Override
-    public boolean isAccountNonLocked(String phoneNumber) {
-        return !getUser(phoneNumber).getLocked();
-    }
-
-    @Override
-    public boolean isAccountEnabled(String phoneNumber) {
-        return getUser(phoneNumber).getEnabled();
-    }
-
-    @Override
-    public boolean isPhoneNumberExists(String phoneNumber) {
-        try{
-            getUser(phoneNumber);
-            return true;
-        } catch (ResourceNotFoundException e) {
-            return false;
-        }
     }
 
     private User getUser(String email) {

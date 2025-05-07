@@ -1,6 +1,7 @@
 package nashtech.rookie.uniform.application.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nashtech.rookie.uniform.shared.exceptions.InternalServerErrorException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AwsS3Impl implements StorageService {
 
     private final S3Client s3Client;
@@ -40,6 +42,7 @@ public class AwsS3Impl implements StorageService {
                 try {
                     uploadFile(key, folder, file);
                 } catch (IOException e) {
+                    log.warn("Error uploading file", e);
                     throw new InternalServerErrorException(String.format("Failed to upload file with key %s: %s", key, e.getMessage()));
                 }
             });
@@ -62,6 +65,7 @@ public class AwsS3Impl implements StorageService {
                 .toList();
 
         if (!errors.isEmpty()) {
+            log.warn("Some files failed to upload: " + String.join("; ", errors));
             throw new InternalServerErrorException("Some files failed to upload: " + String.join("; ", errors));
         }
     }
