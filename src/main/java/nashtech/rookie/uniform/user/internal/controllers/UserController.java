@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<UserDetailResponse> getUser(
@@ -47,6 +49,7 @@ public class UserController {
         userService.createUser(userRegisterRequest);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/lock")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUserLockStatus(@PathVariable UUID id, @RequestParam boolean lock) {

@@ -17,7 +17,6 @@ import nashtech.rookie.uniform.user.internal.repositories.UserSpecificationBuild
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +31,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserSpecificationBuilder userSpecificationBuilder;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional(readOnly = true)
     @Override
     public Page<UserDetailResponse> getAllUser(Pageable pageable, UserFilter userFilter) {
@@ -63,7 +61,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public UserDetailResponse getUserProfile() {
         UUID userId = SecurityUtil.getCurrentUserId();
@@ -71,6 +68,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDetailResponse(user);
     }
 
+    @Transactional
     @Override
     public void changePassword(ChangePasswordRequest changePasswordRequest) {
         UUID userId = SecurityUtil.getCurrentUserId();
@@ -94,7 +92,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void updateLockedUser(UUID id, boolean locked) {
         User user = getUserById(id);

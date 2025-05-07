@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-@Tag(name="Product", description = "Product API for admin")
+@Tag(name="Product Management Controller", description = "Product API for admin")
 @RestController
 @RequestMapping("/api/${application.version}/admin/products")
 @RequiredArgsConstructor

@@ -1,6 +1,8 @@
 package nashtech.rookie.uniform.application.configuration.security;
 
 import lombok.RequiredArgsConstructor;
+import nashtech.rookie.uniform.application.constant.SecurityConstants;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+import static nashtech.rookie.uniform.application.constant.SecurityConstants.PERMIT_ONLY_GET_ENDPOINTS;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -27,8 +31,8 @@ public class SecurityConfig {
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
-    private static final String[] PERMIT_ONLY_GET_ENDPOINTS = {"/api/categories/**", "/api/products/**", "/api/size/**" };
-    private static final String[] PERMIT_ALL_ENDPOINTS = { "/api/auth/login", "/api/auth/refresh", "/api/users/register", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" };
+    @Value("${front-end.domain}")
+    private String frontEndDomain;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,8 +41,17 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(PERMIT_ALL_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET,PERMIT_ONLY_GET_ENDPOINTS).permitAll()
+
+                        .requestMatchers(SecurityConstants.PERMIT_ALL_ENDPOINTS).permitAll()
+                        .requestMatchers(SecurityConstants.DOCUMENTATION_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PERMIT_ONLY_GET_ENDPOINTS).permitAll()
+
+                        .requestMatchers(SecurityConstants.ADMIN_ENDPOINTS).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
+
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -52,7 +65,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of(frontEndDomain));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

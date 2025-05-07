@@ -8,7 +8,6 @@ import nashtech.rookie.uniform.product.internal.mappers.SizeMapper;
 import nashtech.rookie.uniform.product.internal.repositories.SizeGroupRepository;
 import nashtech.rookie.uniform.product.internal.services.SizeGroupService;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +35,6 @@ public class SizeGroupServiceImpl implements SizeGroupService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public SizeResponse createSize(SizeRequest sizeRequest) {
         SizeGroup size = sizeMapper.sizeRequestToSize(sizeRequest);
@@ -45,7 +43,6 @@ public class SizeGroupServiceImpl implements SizeGroupService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public SizeResponse updateSize(Integer id, SizeRequest sizeRequest) {
         SizeGroup size = findSizes(id);

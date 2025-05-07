@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class JwtUtil {
             .issuer(issuer)
             .issueTime(new Date())
             .expirationTime(new Date(
-                    Instant.now().plusMillis(jwtAccessExpirationTime).getEpochSecond()
+                    Instant.now().plus(jwtAccessExpirationTime, ChronoUnit.MINUTES).toEpochMilli()
             ))
             .build();
 
@@ -70,7 +71,7 @@ public class JwtUtil {
             .claim("email", email)
             .issueTime(new Date())
             .expirationTime(new Date(
-                    Instant.now().plusMillis(jwtRefreshExpirationTime).getEpochSecond()
+                    Instant.now().plus(jwtRefreshExpirationTime, ChronoUnit.MINUTES).toEpochMilli()
             ))
             .build();
 

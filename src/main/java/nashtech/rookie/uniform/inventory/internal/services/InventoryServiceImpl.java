@@ -9,7 +9,6 @@ import nashtech.rookie.uniform.inventory.internal.mappers.InventoryMapper;
 import nashtech.rookie.uniform.inventory.internal.repositories.InventoryRepository;
 import nashtech.rookie.uniform.product.api.ProductServiceProvider;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +23,6 @@ public class InventoryServiceImpl implements InventoryService {
     private final ProductServiceProvider productServiceProvider;
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse createInventory(InventoryRequest inventoryRequest) {
         if(!productServiceProvider.productVariantsExists(inventoryRequest.getProductVariantsId())) {
@@ -36,7 +34,6 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse updateInventory(Long id, InventoryUpdateRequest inventoryUpdateRequest) {
         Inventory inventory = findInventoryById(id);
@@ -47,7 +44,6 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public List<InventoryResponse> getAllInventories() {
         List<Inventory> inventories = inventoryRepository.findAll();
@@ -57,12 +53,12 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public InventoryResponse getInventoryById(Long id) {
         Inventory inventory = findInventoryById(id);
         return inventoryMapper.inventoryToInventoryResponse(inventory);
     }
+
     private Inventory findInventoryById(Long id) {
         return inventoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));

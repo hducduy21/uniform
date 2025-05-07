@@ -12,7 +12,6 @@ import nashtech.rookie.uniform.product.internal.repositories.CategoryRepository;
 import nashtech.rookie.uniform.product.internal.services.CategoryService;
 import nashtech.rookie.uniform.shared.exceptions.BadRequestException;
 import nashtech.rookie.uniform.shared.exceptions.ResourceNotFoundException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Collection<CategoryResponse> getTreeCategories() {
         Collection<CategoryResponse> categories = categoryRepository
@@ -53,8 +53,8 @@ public class CategoryServiceImpl implements CategoryService {
         }).toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAuthority('ADMIN')")
     public Collection<CategoryDetailResponse> getAllDetailCategories() {
         return categoryRepository.findAll()
                 .stream()
@@ -69,7 +69,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
         Category parent = Optional.ofNullable(categoryRequest.getParent())
@@ -84,7 +83,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public CategoryDetailResponse updateCategory(Long id, CategoryRequest categoryRequest) {
         Category category = getCategory(id);
@@ -105,7 +103,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void updateCategoryStatus(Long id, ECategotyStatus status) {
         Category category = getCategory(id);

@@ -30,7 +30,6 @@ import nashtech.rookie.uniform.shared.utils.FileUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,7 +56,6 @@ public class ProductServiceImpl implements ProductService {
     private final RatingCounterMapper ratingCounterMapper;
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public Page<ProductResponse> getProductsByAdmin(Pageable pageable, ProductFilter productFilter) {
         Specification<Product> spec = adminProductSpecificationBuilder.build(productFilter);
@@ -82,14 +80,12 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productToProductResponse(product);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional(readOnly = true)
     @Override
     public ProductDetailsResponse getProductDetailById(UUID productId) {
         return productMapper.productToProductDetailsResponse(getProduct(productId));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @Override
     public UUID createProduct(ProductRequest productRequest) {
@@ -106,7 +102,6 @@ public class ProductServiceImpl implements ProductService {
         return product.getId();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @Override
     public ProductResponse updateProduct(UUID productId, ProductRequest productRequest) {
@@ -122,7 +117,6 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productToProductResponse(product);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @Override
     public void uploadProductImage(UUID productId, MultipartFile file) {
@@ -153,7 +147,6 @@ public class ProductServiceImpl implements ProductService {
         return productVariantsMapper.productVariantsToResponses(productVariants, quantityInStocks);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @Override
     public void uploadProductVariantsImage(UUID productId, ListVariantsImageUploadationRequest listVariantsImageUploadationRequest) {
@@ -175,7 +168,6 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @Override
     public void deleteProduct(UUID productId) {
@@ -187,7 +179,6 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @Override
     public void updateProductVariant(UUID productId, ProductVariantsRequest productVariantsRequest) {
