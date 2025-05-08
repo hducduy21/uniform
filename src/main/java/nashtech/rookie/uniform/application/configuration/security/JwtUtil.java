@@ -54,6 +54,7 @@ public class JwtUtil {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
             .subject(user.getId().toString())
             .claim("email", user.getEmail())
+            .claim("role", user.getRole())
             .claim("phoneNumber", user.getPhoneNumber())
             .issuer(issuer)
             .issueTime(new Date())

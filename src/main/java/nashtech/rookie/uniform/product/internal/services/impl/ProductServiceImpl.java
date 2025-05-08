@@ -191,22 +191,16 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public void updateProductVariant(UUID productId, ProductVariantsRequest productVariantsRequest) {
-        Collection<ProductVariants> productVariants = productVariantsRepository.findAllByProduct_Id(productId);
-
-        if (productVariants.isEmpty()) {
-            log.warn("Product has no variants: " + productId);
-            throw new ResourceNotFoundException("Product variants not found");
+        if (productVariantsRequest.getProductVariantCostPrice().isEmpty()) {
+            return;
         }
+        productVariantsRequest.getProductVariantCostPrice().forEach(productVariantCostPrice -> {
+            ProductVariants productVariant = productVariantsRepository.findById(productVariantCostPrice.getProductVariantId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Product variant not found"));
+            productVariant.setCostPrice(productVariantCostPrice.getCostPrice());
+            productVariantsRepository.save(productVariant);
+        });
 
-        productVariants.stream()
-                .filter(variant ->
-                        productVariantsRequest.getProductVariantCostPriceMap()
-                                .containsKey(variant.getId()))
-                .forEach(variant -> variant.setCostPrice(
-                        productVariantsRequest.getProductVariantCostPriceMap()
-                                .get(variant.getId())));
-
-        productVariantsRepository.saveAll(productVariants);
         log.info("Updated product variant with id: {}", productId);
     }
 

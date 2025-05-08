@@ -46,11 +46,11 @@ public class SecurityConfig {
                         .requestMatchers(SecurityConstants.DOCUMENTATION_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, PERMIT_ONLY_GET_ENDPOINTS).permitAll()
 
-                        .requestMatchers(SecurityConstants.ADMIN_ENDPOINTS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
+                        .requestMatchers(SecurityConstants.ADMIN_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, SecurityConstants.ADMIN_WRITE_ENDPOINTS).hasAuthority("ADMIN")
 
                         .anyRequest()
                         .authenticated())

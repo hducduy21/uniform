@@ -27,7 +27,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<UserDetailResponse> getUser(
@@ -49,7 +49,7 @@ public class UserController {
         userService.createUser(userRegisterRequest);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("/{id}/lock")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUserLockStatus(@PathVariable UUID id, @RequestParam boolean lock) {

@@ -4,11 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
+import java.util.Collection;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class ProductVariantsRequest {
-    Map<Long, Double> productVariantCostPriceMap;
+    private Collection<ProductVariantCostPrice> productVariantCostPrice;
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    public static class ProductVariantCostPrice {
+        Long productVariantId;
+        Double costPrice;
+    }
 }
