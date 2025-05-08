@@ -14,7 +14,7 @@ import java.util.Collection;
 
 @Tag(name="Size", description = "Size type of product APIs")
 @RestController
-@RequestMapping("/api/${application.version}/sizes")
+@RequestMapping("/api/v1/sizes")
 @RequiredArgsConstructor
 @Slf4j
 public class SizeGroupController {

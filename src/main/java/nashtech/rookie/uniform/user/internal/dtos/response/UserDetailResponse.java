@@ -1,5 +1,7 @@
 package nashtech.rookie.uniform.user.internal.dtos.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Value;
 import nashtech.rookie.uniform.user.internal.entities.enums.EGender;
 import nashtech.rookie.uniform.user.internal.entities.enums.ERole;
@@ -12,6 +14,8 @@ import java.util.UUID;
  * DTO for {@link nashtech.rookie.uniform.user.internal.entities.User}
  */
 @Value
+@Builder
+@AllArgsConstructor
 public class UserDetailResponse {
     UUID id;
     String email;

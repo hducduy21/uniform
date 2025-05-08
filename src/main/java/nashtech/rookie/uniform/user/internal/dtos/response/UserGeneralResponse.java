@@ -23,7 +23,7 @@ public class UserGeneralResponse {
 
     private String lastName;
 
-    private LocalDate birthDate;
+    private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)
     private EGender gender;

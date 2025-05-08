@@ -16,7 +16,7 @@ import java.util.Collection;
 
 @Tag(name="Inventory", description = "Inventory APIs")
 @RestController
-@RequestMapping("/api/${application.version}/inventories")
+@RequestMapping("/api/v1/inventories")
 @RequiredArgsConstructor
 @Slf4j
 public class InventoryController {

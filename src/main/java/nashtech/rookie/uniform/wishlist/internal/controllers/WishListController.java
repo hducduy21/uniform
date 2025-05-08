@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Tag(name = "WishList", description = "WishList APIs")
 @RestController
-@RequestMapping("/api/${application.version}/wishlists")
+@RequestMapping("/api/v1/wishlists")
 @RequiredArgsConstructor
 public class WishListController {
     private final WishListService wishListService;

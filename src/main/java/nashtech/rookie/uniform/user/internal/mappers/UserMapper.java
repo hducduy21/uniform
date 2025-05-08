@@ -11,7 +11,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
     User userRegisterRequestToUser(UserRegisterRequest userRegisterRequest);
-    UserGeneralResponse userGeneralToUserGeneralResponse(User user);
+    UserGeneralResponse userToUserGeneralResponse(User user);
     UserDetailResponse userToUserDetailResponse(User user);
     UserInfoDto userToUserInfoDto(User user);
 

@@ -15,7 +15,7 @@ public class UserInfoDto {
     private String phoneNumber;
     private String firstName;
     private String lastName;
-    private LocalDate birthDate;
+    private LocalDate birthday;
     private String gender;
     private String role;
     private boolean locked;

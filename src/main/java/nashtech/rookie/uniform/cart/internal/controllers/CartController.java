@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name="Cart", description = "Cart APIs")
 @RestController
-@RequestMapping("/api/${application.version}/carts")
+@RequestMapping("/api/v1/carts")
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;

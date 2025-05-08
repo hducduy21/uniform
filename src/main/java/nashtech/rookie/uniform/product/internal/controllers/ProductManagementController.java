@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Tag(name="Product Management Controller", description = "Product API for admin")
 @RestController
-@RequestMapping("/api/${application.version}/admin/products")
+@RequestMapping("/api/v1/admin/products")
 @RequiredArgsConstructor
 @Slf4j
 public class ProductManagementController {

@@ -17,7 +17,7 @@ import java.util.Collection;
 
 @Tag(name="Category", description = "Category APIs")
 @RestController
-@RequestMapping("/api/${application.version}/categories")
+@RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
 @Slf4j
 public class CategoryController {

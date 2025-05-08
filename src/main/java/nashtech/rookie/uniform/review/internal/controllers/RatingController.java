@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Tag(name="Rating", description = "Rating APIs")
 @RestController
-@RequestMapping("/api/${application.version}/ratings")
+@RequestMapping("/api/v1/ratings")
 @RequiredArgsConstructor
 public class RatingController {
     private final ReviewService reviewService;

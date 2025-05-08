@@ -7,8 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.UUID;
 
-@NoArgsConstructor
 @Slf4j
+@NoArgsConstructor
 public class SecurityUtil {
 
         public static UUID getCurrentUserId() {
